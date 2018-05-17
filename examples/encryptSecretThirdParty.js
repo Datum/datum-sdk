@@ -6,13 +6,21 @@ var secret = "Test1jöjöadsfölkjklsdajfökjakösdfkjfölöfsöf23";
 
 let client = new DatumClient();
 
-//create identy for third party
+
+let privKey = '';
+
+//create identy for third party and encrypt with public key from third party then decrypt with private key to get plaintext secret back
 client.createIdentity()
-.then(identiy => {
-    return client.encryptPublic(secret, '0x' + identiy.publicKey);
+.then(identity => {
+    privKey = identity.privateKey;
+    return client.encryptPublic(secret, '0x' + identity.publicKey);
 })
-.then(encrypted => {
-    console.log(encrypted);
+.then(result => {
+    var priv = privKey.slice(2);
+    return client.decryptPublic(result,priv);
+})
+.then(decrypted => {
+    console.log(decrypted);
 })
 .catch((error) => {
     console.log(error);
