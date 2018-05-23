@@ -17,11 +17,10 @@ module.exports = class Datum {
 
     createIdentity() {
         return new Promise((resolve, reject) => {
-            try
-            {
+            try {
                 let identity = EthCrypto.createIdentity();
                 resolve(identity)
-            } catch(err) {
+            } catch (err) {
                 reject('Error creating identity');
             }
         })
@@ -29,12 +28,11 @@ module.exports = class Datum {
 
     hash(obj) {
         return new Promise((resolve, reject) => {
-            try
-            {
+            try {
                 let hash = ethUtils.bufferToHex(ethUtils.sha256(obj));
                 resolve(hash)
-            } 
-            catch(err) {
+            }
+            catch (err) {
                 reject('Error creating hash :' + err.message);
             }
         })
@@ -42,12 +40,11 @@ module.exports = class Datum {
 
     encryptPrivate(obj, secret, type = 'json') {
         return new Promise((resolve, reject) => {
-            try
-            {
+            try {
                 let encryptd = new Buffer(cryptoJS.AES.encrypt(obj, secret).toString()).toString();
                 resolve(encryptd)
-            } 
-            catch(err) {
+            }
+            catch (err) {
                 reject('Error encryption data :' + err.message);
             }
         })
@@ -55,12 +52,11 @@ module.exports = class Datum {
 
     decryptPrivate(obj, secret, type = 'json') {
         return new Promise((resolve, reject) => {
-            try
-            {
+            try {
                 let decrypted = cryptoJS.AES.decrypt(obj, secret).toString(cryptoJS.enc.Utf8);
                 resolve(decrypted)
-            } 
-            catch(err) {
+            }
+            catch (err) {
                 reject('Error decrypting data :' + err.message);
             }
         })
@@ -68,12 +64,11 @@ module.exports = class Datum {
 
     encryptPublic(msg, publicKey) {
         return new Promise((resolve, reject) => {
-            try
-            {
+            try {
                 let encryptd = ecies.encrypt(ethUtils.toBuffer(publicKey), ethUtils.toBuffer(msg));
                 resolve(ethUtils.bufferToHex(encryptd));
-            } 
-            catch(err) {
+            }
+            catch (err) {
                 reject('Error encryption with public key :' + err.message);
             }
         })
@@ -81,16 +76,15 @@ module.exports = class Datum {
 
     decryptPublic(encrypted, privateKey) {
         return new Promise((resolve, reject) => {
-            try
-            {
+            try {
                 let encryptd = ecies.decrypt(privateKey, ethUtils.toBuffer(encrypted)).toString();
                 resolve(encryptd)
-            } 
-            catch(err) {
+            }
+            catch (err) {
                 reject('Error decryption with private key :' + err.message);
             }
         })
-        
+
     }
 
     canStoreData(address) {
@@ -104,41 +98,39 @@ module.exports = class Datum {
     }
 
 
-    createInitStorageTransaction(address)
-    {
+    createInitStorageTransaction(address) {
         return this.getNewRawTranscation(address)
-        .then(tx => {
-            var data = this.storageContract.methods.initStorage(address, address, [], 1,1).encodeABI();
-            tx.to = contractAddress;
-            tx.data = data;
-            tx.value = '0x0';
-            return tx;
-        })
+            .then(tx => {
+                var data = this.storageContract.methods.initStorage(address, address, [], 1, 1).encodeABI();
+                tx.to = contractAddress;
+                tx.data = data;
+                tx.value = '0x0';
+                return tx;
+            })
     }
 
     getNewRawTranscation(from, gasPrice = 9000000000, gasLimit = 90000) {
         return this.getTransactionCount(from)
-        .then(count => {
-            return {
-                "from": from,
-                "nonce": this.web3.utils.toHex(count),
-                "gasPrice": this.web3.utils.toHex(gasPrice),
-                "gasLimit": this.web3.utils.toHex(gasLimit),
-                "chainId" : this.web3.utils.toHex(51515)
-            };
-        })
+            .then(count => {
+                return {
+                    "from": from,
+                    "nonce": this.web3.utils.toHex(count),
+                    "gasPrice": this.web3.utils.toHex(gasPrice),
+                    "gasLimit": this.web3.utils.toHex(gasLimit),
+                    "chainId": this.web3.utils.toHex(51515)
+                };
+            })
     }
 
     signRawTransaction(rawTransaction, privKey) {
         return new Promise((resolve, reject) => {
-            try
-            {
+            try {
                 var tx = new Tx(rawTransaction);
                 tx.sign(privKey);
                 var serializedTx = tx.serialize();
                 resolve('0x' + serializedTx.toString('hex'))
-            } 
-            catch(err) {
+            }
+            catch (err) {
                 reject('Error signing transaction with private key :' + err.message);
             }
         })
@@ -146,5 +138,18 @@ module.exports = class Datum {
 
     sendRawTransaction(tx) {
         return this.web3.eth.sendRawTransaction(tx);
+    }
+
+
+    getBalance(address) {
+        return new Promise((resolve, reject) => {
+            this.web3.eth.getBalance(address, (err, balance) => {
+                if (err != null) {
+                    reject('There was an error fetching balance.')
+                }
+
+                resolve(balance);
+            });
+        })
     }
 }
