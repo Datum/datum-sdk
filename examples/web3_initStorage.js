@@ -16,7 +16,10 @@ client.createIdentity()
     return client.signRawTransaction(tx, new Buffer(ident.privateKey.slice(2), 'hex'));
 })
 .then(signedTransaction => {
-    console.log(signedTransaction);
+    return client.sendSignedTransaction(signedTransaction);
+})
+.then(result => {
+    console.log(result);
 })
 .catch((error) => {
     console.log(error);

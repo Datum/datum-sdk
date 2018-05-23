@@ -136,8 +136,8 @@ module.exports = class Datum {
         })
     }
 
-    sendRawTransaction(tx) {
-        return this.web3.eth.sendRawTransaction(tx);
+    sendSignedTransaction(tx) {
+        return this.web3.eth.sendSignedTransaction(tx);
     }
 
 
