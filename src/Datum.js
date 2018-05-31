@@ -19,6 +19,14 @@ module.exports = class Datum {
         this.marketplaceContract = new this.web3.eth.Contract(marketplaceContractABI, marketplaceContractAddress);
     }
 
+    setPrivateKey(privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    setPublicAddress(publicAddress) {
+        this.publicAddress = publicAddress;
+    }
+
     createIdentity() {
         return new Promise((resolve, reject) => {
             try {
@@ -102,6 +110,8 @@ module.exports = class Datum {
     }
 
 
+
+
     createInitStorageTransaction(address) {
         return this.getNewRawTranscation(address)
             .then(tx => {
@@ -113,10 +123,11 @@ module.exports = class Datum {
             })
     }
 
-    createAddAuctionTransaction(address_from, duration, minBid, bidStep, instantBuyPrice) {
+
+    createAddAuctionTransaction(address_from, id, duration, minBid, bidStep, instantBuyPrice) {
         return this.getNewRawTranscation(address_from)
             .then(tx => {
-                var data = this.marketplaceContract.methods.addAuction(duration, minBid, bidStep, instantBuyPriuce).encodeABI();
+                var data = this.marketplaceContract.methods.addAuction(id, duration, minBid, bidStep, instantBuyPriuce).encodeABI();
                 tx.to = marketplaceContractAddress;
                 tx.data = data;
                 tx.value = '0x0';
@@ -231,4 +242,36 @@ module.exports = class Datum {
             });
         })
     }
+
+    //public methods
+    addAuction(id, duration, minBid, bidStep, instantPrice) {
+        return createAddAuctionTransaction(this.publicAddress,id, duration, minBid, bidStep, instantPrice)
+        .then(result => {
+            return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
+        })
+        .then(signedTransaction => {
+            return sendSignedTransaction(signedTransaction);
+        })
+    }
+
+    bidAuction(id, amount) {
+        return createAuctionBidTransaction(this.publicAddress,id,amount)
+        .then(result => {
+            return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
+        })
+        .then(signedTransaction => {
+            return sendSignedTransaction(signedTransaction);
+        })
+    }
+
+    closeAuction(id) {
+        return createAuctionCloseTransaction(this.publicAddress,id)
+        .then(result => {
+            return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
+        })
+        .then(signedTransaction => {
+            return sendSignedTransaction(signedTransaction);
+        })
+    }
+
 }
