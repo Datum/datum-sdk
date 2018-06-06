@@ -50,6 +50,30 @@ module.exports = class Datum {
         })
     }
 
+
+    sign(msg) {
+        return new Promise((resolve, reject) => {
+            this.web3.eth.accounts.sign(msg, this.privateKey, (err, result) => {
+                if (err != null) {
+                    reject('There was an error signing message.')
+                }
+                resolve(result);
+            });
+        })
+    }
+
+    getSignedTimestampMessage() {
+        return new Promise((resolve, reject) => {
+            let msg = new Date().getTime().toString();
+            this.web3.eth.accounts.sign(msg, this.privateKey, (err, result) => {
+                if (err != null) {
+                    reject('There was an error signing teimstamp message.')
+                }
+                resolve(result);
+            });
+        })
+    }
+
     encryptPrivate(obj, secret, type = 'json') {
         return new Promise((resolve, reject) => {
             try {
@@ -161,7 +185,7 @@ module.exports = class Datum {
         return this.getNewRawTranscation(address_from)
             .then(tx => {
                 tx.to = marketplaceContractAddress;
-                tx.value =  web3.utils.toWei(amount, 'ether');
+                tx.value = web3.utils.toWei(amount, 'ether');
                 return tx;
             })
     }
@@ -245,33 +269,33 @@ module.exports = class Datum {
 
     //public methods
     addAuction(id, duration, minBid, bidStep, instantPrice) {
-        return createAddAuctionTransaction(this.publicAddress,id, duration, minBid, bidStep, instantPrice)
-        .then(result => {
-            return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
-        })
-        .then(signedTransaction => {
-            return sendSignedTransaction(signedTransaction);
-        })
+        return createAddAuctionTransaction(this.publicAddress, id, duration, minBid, bidStep, instantPrice)
+            .then(result => {
+                return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
+            })
+            .then(signedTransaction => {
+                return sendSignedTransaction(signedTransaction);
+            })
     }
 
     bidAuction(id, amount) {
-        return createAuctionBidTransaction(this.publicAddress,id,amount)
-        .then(result => {
-            return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
-        })
-        .then(signedTransaction => {
-            return sendSignedTransaction(signedTransaction);
-        })
+        return createAuctionBidTransaction(this.publicAddress, id, amount)
+            .then(result => {
+                return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
+            })
+            .then(signedTransaction => {
+                return sendSignedTransaction(signedTransaction);
+            })
     }
 
     closeAuction(id) {
-        return createAuctionCloseTransaction(this.publicAddress,id)
-        .then(result => {
-            return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
-        })
-        .then(signedTransaction => {
-            return sendSignedTransaction(signedTransaction);
-        })
+        return createAuctionCloseTransaction(this.publicAddress, id)
+            .then(result => {
+                return signRawTransaction(tx, new Buffer(this.privateKey.slice(2), 'hex'));
+            })
+            .then(signedTransaction => {
+                return sendSignedTransaction(signedTransaction);
+            })
     }
 
 }
