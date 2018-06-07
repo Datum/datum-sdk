@@ -4,12 +4,17 @@ const ethUtils = require("ethereumjs-util");
 const cryptoJS = require("crypto-js");
 const ecies = require("eth-ecies");
 const Tx = require('ethereumjs-tx')
+const request = require('request');
 
 const contractABI = [{ "constant": true, "inputs": [{ "name": "dataHash", "type": "bytes32" }], "name": "getEncryptedSecret", "outputs": [{ "name": "", "type": "bytes" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "dataHash", "type": "bytes32" }], "name": "getAccessKeysForData", "outputs": [{ "name": "", "type": "address[]" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "unregisterNode", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "amount", "type": "uint256" }], "name": "setRegisterNodeDepositAmount", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "bytes32" }], "name": "allowedStorageNodesForPublicKey", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "dataHash", "type": "bytes32" }, { "name": "signedMessage", "type": "bytes32" }, { "name": "v", "type": "uint8" }, { "name": "r", "type": "bytes32" }, { "name": "s", "type": "bytes32" }], "name": "canKeyAccessData", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "storagenode", "type": "address" }], "name": "rewardsForAddress", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "dataHash", "type": "bytes32" }, { "name": "merkleRoot", "type": "bytes32" }, { "name": "keysToAccess", "type": "address[]" }, { "name": "privacy", "type": "uint256" }, { "name": "duration", "type": "uint256" }], "name": "initStorage", "outputs": [{ "name": "", "type": "string" }], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [{ "name": "storagenode", "type": "address" }], "name": "endpointForAddress", "outputs": [{ "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "endpoint", "type": "string" }, { "name": "bandwidth", "type": "uint256" }, { "name": "region", "type": "uint256" }], "name": "registerNode", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "lockedAmounts", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "dataHash", "type": "bytes32" }, { "name": "publicKey", "type": "address" }], "name": "canNodeStoreId", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }, { "name": "", "type": "uint256" }], "name": "storageItems", "outputs": [{ "name": "id", "type": "bytes32" }, { "name": "merkleRoot", "type": "bytes32" }, { "name": "privacy", "type": "uint256" }, { "name": "duration", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "dataHash", "type": "bytes32" }, { "name": "publicKey", "type": "address" }, { "name": "encryptedSecret", "type": "bytes" }], "name": "addStorageAccessKey", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "canStoreData", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "registeredNodes", "outputs": [{ "name": "endpoint", "type": "string" }, { "name": "bandwidth", "type": "uint256" }, { "name": "region", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "nodeRegisterDepositAmount", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "storageNode", "type": "address" }, { "indexed": false, "name": "endpoint", "type": "string" }, { "indexed": false, "name": "bandwidth", "type": "uint256" }, { "indexed": false, "name": "region", "type": "uint256" }], "name": "StorageNodeRegistered", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "storageNode", "type": "address" }], "name": "StorageNodeUnRegistered", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "owner", "type": "address" }, { "indexed": false, "name": "dataHash", "type": "bytes32" }, { "indexed": false, "name": "amount", "type": "uint256" }], "name": "StorageInitialized", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "owner", "type": "address" }, { "indexed": false, "name": "dataHash", "type": "bytes32" }, { "indexed": false, "name": "publicKey", "type": "address" }], "name": "StorageItemKeyAdded", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "dataHash", "type": "bytes32" }, { "indexed": false, "name": "storageNode", "type": "address" }, { "indexed": false, "name": "endpoint", "type": "string" }], "name": "StorageEndpointSelected", "type": "event" }];
 const contractAddress = '0x3768739e501138Bfc983c7014533Dd96799c0625';
 
 const marketplaceContractABI = [{ "constant": true, "inputs": [{ "name": "dataHash", "type": "bytes32" }], "name": "getEncryptedSecret", "outputs": [{ "name": "", "type": "bytes" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "dataHash", "type": "bytes32" }], "name": "getAccessKeysForData", "outputs": [{ "name": "", "type": "address[]" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "unregisterNode", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "amount", "type": "uint256" }], "name": "setRegisterNodeDepositAmount", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "bytes32" }], "name": "allowedStorageNodesForPublicKey", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "dataHash", "type": "bytes32" }, { "name": "signedMessage", "type": "bytes32" }, { "name": "v", "type": "uint8" }, { "name": "r", "type": "bytes32" }, { "name": "s", "type": "bytes32" }], "name": "canKeyAccessData", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "storagenode", "type": "address" }], "name": "rewardsForAddress", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "dataHash", "type": "bytes32" }, { "name": "merkleRoot", "type": "bytes32" }, { "name": "keysToAccess", "type": "address[]" }, { "name": "privacy", "type": "uint256" }, { "name": "duration", "type": "uint256" }], "name": "initStorage", "outputs": [{ "name": "", "type": "string" }], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [{ "name": "storagenode", "type": "address" }], "name": "endpointForAddress", "outputs": [{ "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "endpoint", "type": "string" }, { "name": "bandwidth", "type": "uint256" }, { "name": "region", "type": "uint256" }], "name": "registerNode", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "lockedAmounts", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "dataHash", "type": "bytes32" }, { "name": "publicKey", "type": "address" }], "name": "canNodeStoreId", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }, { "name": "", "type": "uint256" }], "name": "storageItems", "outputs": [{ "name": "id", "type": "bytes32" }, { "name": "merkleRoot", "type": "bytes32" }, { "name": "privacy", "type": "uint256" }, { "name": "duration", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "dataHash", "type": "bytes32" }, { "name": "publicKey", "type": "address" }, { "name": "encryptedSecret", "type": "bytes" }], "name": "addStorageAccessKey", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "canStoreData", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "registeredNodes", "outputs": [{ "name": "endpoint", "type": "string" }, { "name": "bandwidth", "type": "uint256" }, { "name": "region", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "nodeRegisterDepositAmount", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "storageNode", "type": "address" }, { "indexed": false, "name": "endpoint", "type": "string" }, { "indexed": false, "name": "bandwidth", "type": "uint256" }, { "indexed": false, "name": "region", "type": "uint256" }], "name": "StorageNodeRegistered", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "storageNode", "type": "address" }], "name": "StorageNodeUnRegistered", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "owner", "type": "address" }, { "indexed": false, "name": "dataHash", "type": "bytes32" }, { "indexed": false, "name": "amount", "type": "uint256" }], "name": "StorageInitialized", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "owner", "type": "address" }, { "indexed": false, "name": "dataHash", "type": "bytes32" }, { "indexed": false, "name": "publicKey", "type": "address" }], "name": "StorageItemKeyAdded", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "dataHash", "type": "bytes32" }, { "indexed": false, "name": "storageNode", "type": "address" }, { "indexed": false, "name": "endpoint", "type": "string" }], "name": "StorageEndpointSelected", "type": "event" }];
 const marketplaceContractAddress = '0x3768739e501138Bfc983c7014533Dd96799c0625';
+
+
+const fixedStorageOneEndpoint = "https://storage.eu.datum.org/storage";
+
 
 
 module.exports = class Datum {
@@ -39,51 +44,37 @@ module.exports = class Datum {
     }
 
     hash(obj) {
-        return new Promise((resolve, reject) => {
-            try {
-                let hash = ethUtils.bufferToHex(ethUtils.sha256(obj));
-                resolve(hash)
-            }
-            catch (err) {
-                reject('Error creating hash :' + err.message);
-            }
-        })
+        try {
+            let hash = ethUtils.bufferToHex(ethUtils.sha256(obj));
+            return hash;
+        }
+        catch (err) {
+            return err;
+        }
     }
 
 
     sign(msg) {
-        return new Promise((resolve, reject) => {
-            this.web3.eth.accounts.sign(msg, this.privateKey, (err, result) => {
-                if (err != null) {
-                    reject('There was an error signing message.')
-                }
-                resolve(result);
-            });
-        })
+        return this.web3.eth.accounts.sign(msg, this.privateKey);
     }
 
     getSignedTimestampMessage() {
-        return new Promise((resolve, reject) => {
-            let msg = new Date().getTime().toString();
-            this.web3.eth.accounts.sign(msg, this.privateKey, (err, result) => {
-                if (err != null) {
-                    reject('There was an error signing teimstamp message.')
-                }
-                resolve(result);
-            });
-        })
+        let msg = new Date().getTime().toString();
+        return this.sign(msg);
     }
 
+
+
+    
+
     encryptPrivate(obj, secret, type = 'json') {
-        return new Promise((resolve, reject) => {
-            try {
-                let encryptd = new Buffer(cryptoJS.AES.encrypt(obj, secret).toString()).toString();
-                resolve(encryptd)
-            }
-            catch (err) {
-                reject('Error encryption data :' + err.message);
-            }
-        })
+        try {
+            let encryptd = new Buffer(cryptoJS.AES.encrypt(obj, secret).toString()).toString();
+            return encryptd;
+        }
+        catch (err) {
+            return err;
+        }
     }
 
     decryptPrivate(obj, secret, type = 'json') {
@@ -298,4 +289,97 @@ module.exports = class Datum {
             })
     }
 
+
+
+
+
+
+    //SDK public methods
+
+    /**
+     * @dev Uploads data to a Datum network storage node
+     * @param data the data you wanna upload
+     * @param secret the private secret used for encryption
+     */
+    uploadData(data, secret) {
+        return new Promise((resolve, reject) => {
+            try
+            {
+                var dataHash = this.hash(data);
+                var encryptedData = this.encryptPrivate(data, secret);
+                var getSignedMessage = this.getSignedTimestampMessage();
+
+                request.post({
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    url: fixedStorageOneEndpoint + '/store',
+                    body: "id=" + dataHash + "&signature=" + getSignedMessage.message + "#" + getSignedMessage.signature + "&data=" + encryptedData.toString()
+                }, function (error, response, body) {
+                    if(error) {
+                        reject('Error uploading data :' + error.message);
+                    } else {
+                        resolve(response.body);
+                    }
+                });
+
+            } catch(error) {
+                reject('Error hashing and signing data :' + error.message);
+            }
+        })
+    }
+
+
+    /**
+     * @dev Downloads data from a Datum network storage node
+     * @param id id of the data hash
+     */
+    downloadData(id) {
+        return new Promise((resolve, reject) => {
+            try
+            {
+                var getSignedMessage = this.getSignedTimestampMessage();
+
+                request.post({
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    url: fixedStorageOneEndpoint + '/download',
+                    body: "id=" + dataId + "&signature=" + message.signature
+                }, function (error, response, body) {
+                    if(error) {
+                        reject('Error downlading data :' + error.message);
+                    } else {
+                        resolve(response.body);
+                    }
+                });
+            } catch(error) {
+                reject('Error getting signed message: ' + error.message);
+            }
+        })
+    }
+
+
+     /**
+     * @dev Downloads data from a Datum network storage node
+     * @param id id of the data hash
+     */
+    removeData(id) {
+        return new Promise((resolve, reject) => {
+            try
+            {
+                var getSignedMessage = this.getSignedTimestampMessage();
+
+                request.post({
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    url: fixedStorageOneEndpoint + '/remove',
+                    body: "id=" + dataId + "&signature=" + message.signature
+                }, function (error, response, body) {
+                    if(error) {
+                        reject('Error downlading data :' + error.message);
+                    } else {
+                        resolve(response.body);
+                    }
+                });
+            } catch(error) {
+                reject('Error getting signed message: ' + error.message);
+            }
+        })
+    }
 }
