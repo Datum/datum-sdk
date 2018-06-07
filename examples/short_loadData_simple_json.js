@@ -1,35 +1,32 @@
 const DatumClient = require('../src/Datum');
 
+
 let client = new DatumClient();
 
-var storageEndPoint = "http://localhost:3000/storage";
 
 //example data
-var dataId = "0xc8e2ef39a58e4d50c5d1c15fef69cede83fc815cbb99339417ab561c88002e55";
+var dataExample = {
+    email: "peter@example.org",
+    wallet: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
 
 //private secret 
 var secret = "Test1jöjöadsfölkjklsdajfökjakösdfkjfölöfsöf23";
 
-//set keys
-client.setPrivateKey('xxxxxxxx');
-client.setPublicAddress('xxxxxxx');
+//id of data in storage node
+var dataId = '0xc8e2ef39a58e4d50c5d1c15fef69cede83fc815cbb99339417ab561c88002e55';
 
-//create hash of data which represent the data id
-client.getSignedTimestampMessage()
-.then(message => {
-    request.post({
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        url: storageEndPoint + '/download',
-        body: "id=" + dataId + "&signature=" + message.signature
-    }, function (error, response, body) {
-        return client.decryptPrivate(response.body, secret)
-    });
-})
-.then(content => {
-    console.log(content);
+
+client.setPrivateKey('0xfedcb2355436330749e0590c5f6d1e0f23bc9bd6aea9fb4b0184815346199d44');
+
+client.downloadData(dataId)
+.then(result => {
+    //encrypted data content
+    console.log(result);
 })
 .catch((error) => {
     console.log(error);
 });
+
 
 
