@@ -1,53 +1,175 @@
 # datum-sdk
+*javascript api for Datum Blockchain*
 
-Run npm install
+npm install datum-sdk --save
 
-# run examples 
+## Full Documentation
 
+## Examples
 
-createIdentity.js
+### Create new Instance
 
-Creates and public/private keypair and wallet address for datum network
+```
+var datum = new Datum(DatumEndpoint, [StorageEndpoint, PrivateKey]);
+```
 
+DatumEndpoint	Any Datum Blockchain HTTP Endpoint
 
-hashData.js
+StorageEndpoint	[Optional] If already clear, set the storage endpoint here
 
-Creates a sha256 hash of given data
-
-
-encryptPrivate.js
-
-Encrypt data locally with private secret
-
-
-decryptPrivate.js
-
-Decrypt data locally with private secret
+PrivateKey	[Optional] If identy already exists, identify yourself with the key
 
 
-encryptThirdParty.js
+/* stores some data to datum network */
 
-Encrypt data with public key from third party
+/* You must have a datum identity with DATCoins filled */
 
-
-web3_canStoreData.ks
-
-Check if the user can store data in datum blockchain (deposit maded in contract)
-
-
-web3_getTransationCount
-
-Get count of transactions made by this address
-
-
-web3_initStorage.js
-
-Creates locally signed transactions to init a storage request
+/* Faucet some DATS/ETH for Rinkeby Testnet under 
+```
+    DAT:    http://52.232.119.164:8081/v1/faucet/dat/[wallet address]
+    ETH:    http://52.232.119.164:8081/v1/faucet/eth/[wallet address]
+```
+*/
 
 
 
+### Create Identity
+
+```
+datum.createIdentity()
+.then(identity => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+})
+```
 
 
+### Transfer to Datum Blockchain
+
+```
+datum.transfer(10000000000000000000)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+})
+```
 
 
+### Calculate Storage Costs, e.g. 1MB for 365 days
+
+```
+datum.getStorageCosts(1024 * 1024, 365)
+.then(costs => {
+    console.log(costs);
+    console.log(p.toDAT(costs));
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+```
+
+### Prepare data for storage node
+
+*random secret will be generated and the data will be encrypted with publicKey from owner*
+
+```
+var data = datum.prepareData('123');
+```
+
+
+### Init Storage to Datum Blockchain
+
+```
+datum.initStorage(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+```
+
+
+### Upload / Set the data to storage node and init in same turn
+
+```
+datum.setAndInit(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
+
+### Upload / Set the data to storage node (initStorage already done)
+
+```
+datum.set(data)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
+
+### Upload / Set the data to storage node with key assigned
+
+```
+datum.setWithKey(data, "key_name")
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
+
+### Download / Get the data to storage node
+
+```
+datum.get(data.id)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
+
+### Download / Get the data from storage node by keyname
+
+```
+datum.getWithKey("key_name")
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
+
+### Remove the data to storage node
+
+```
+datum.remove(data.id)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
 
