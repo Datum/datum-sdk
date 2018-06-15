@@ -20,6 +20,8 @@ Once that package has been installed, a datum instance must be created.
 >Datum Instance
 
 ```javascript
+const Datum = require('datum-sdk');
+
 var datum = new Datum(DatumEndpoint, [StorageEndpoint, PrivateKey]);
 ```
 

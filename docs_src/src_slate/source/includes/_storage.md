@@ -7,13 +7,12 @@ To confirm whether the developer account has been deposited on the blockchain, o
 
 ```javascript
 
-const DatumClient = require('../src/Datum');
+const Datum = require('datum-sdk');
 
-
-let client = new DatumClient();
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
 
 //check if user can store data (checks if deposit for address exists)
-client.createIdentity()
+datum.createIdentity()
 .then(identity => {
     return client.canStoreData(identity.address);
 })
@@ -33,6 +32,11 @@ The example is for 1MB of storage for 365 days.
 >getStorageCosts
 
 ```javascript
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
 datum.getStorageCosts(1024 * 1024, 365)
 .then(costs => {
     console.log(costs);
@@ -54,6 +58,10 @@ Once the encryption and verification process has been concluded, the data can no
 
 ```javascript
 
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
 datum.initStorage(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
 .then(result => {
     console.log(result);
@@ -64,6 +72,10 @@ datum.initStorage(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
 })
 
 Set/Upload Data to node
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
 
 datum.set(data)
 .then(result => {
@@ -77,6 +89,11 @@ datum.set(data)
 > Set/Upload Data to node with Key value assigned
 
 ```javascript
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
 datum.setWithKey(data, "key_name")
 .then(result => {
     console.log(result);
@@ -89,6 +106,10 @@ datum.setWithKey(data, "key_name")
 >Set/Upload Data to node with init Storage
 
 ```javascript
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
 datum.setAndInit(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
 .then(result => {
     console.log(result);
@@ -107,6 +128,10 @@ There are two methods to get the data from the storage node on the blockchain; o
 
 ```javascript
 
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
 datum.get(data.id)
 .then(result => {
     console.log(result);
@@ -119,6 +144,11 @@ datum.get(data.id)
 >Get data from storage node using key value
 
 ```javascript
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
 datum.getWithKey("key_name")
 .then(result => {
     console.log(result);
@@ -134,6 +164,10 @@ Utilize the remove method to permanently delete the data from the blockchain
 >Remove
 
 ```javascript
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
 datum.remove(data.id)
 .then(result => {
     console.log(result);
