@@ -28,25 +28,41 @@ The DatumEndpoint represents any Datum Blockchain HTTP Endpoint
 StorageEndpoint is the storage node public HTTP endpoint where the data has been posted
 PrivateKey represents the identify of the user.
 
-In order to store data on the Datum Network, a datum identity (that also creates a privateKey) must have been generated.
-To act in the network sufficient balance of DAT coins is needed. You can use the DAT Faucet service for that.
-
 The StorageEndpoint and Private key are optional if no transactions to storage node and network are done.
 
-> Public DatumEndpoints
+In order to store data on the Datum Network, a datum identity (that also creates a privateKey) must have been generated.
+To act in the network sufficient balance of DAT coins is needed. You can use the DAT Faucet service for that.
+To send any transaction in Ethereum you need to get some Test ETH from https://faucet.rinkeby.io/
+
+Before you start to interact with Datum Blockchain be sure that your wallet has ETH and DAT balance.
+You can check this with https://rinkeby.etherscan.io/address/[wallet address]
+
+![](etherscan.png)
+
+
+>Public DatumEndpoints
+
+```javascript
 https://node-us-west.datum.org/api
+```
+```javascript
 https://node-asia.datum.org/api
+```
+```javascript
 https://node-eu.datum.org/api
+```
 
 > Public StorageEndpoint
-https://node-us-west.datum.org/storage
 
+```javascript
+https://node-us-west.datum.org/storage
+```
 
 > Faucet some DAT for Rinkeby Testnet under
 
 ```javascript
 
-DAT:    http://52.232.119.164:8081/v1/faucet/dat/[wallet address]
+http://52.232.119.164:8081/v1/faucet/dat/[wallet address]
 ```
 
 
