@@ -11,6 +11,8 @@ npm install datum-sdk --save
 ### Create new Instance
 
 ```
+const Datum = require('datum-sdk');
+
 var datum = new Datum(DatumEndpoint, [StorageEndpoint, PrivateKey]);
 ```
 
@@ -28,7 +30,6 @@ PrivateKey	[Optional] If identy already exists, identify yourself with the key
 /* Faucet some DATS/ETH for Rinkeby Testnet under 
 ```
     DAT:    http://52.232.119.164:8081/v1/faucet/dat/[wallet address]
-    ETH:    http://52.232.119.164:8081/v1/faucet/eth/[wallet address]
 ```
 */
 
@@ -39,13 +40,14 @@ PrivateKey	[Optional] If identy already exists, identify yourself with the key
 *creates an identity object with public/private key and public address*
 
 ```
-datum.createIdentity()
-.then(identity => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-})
+var identity = datum.createIdentity();
+```
+
+Result
+```
+{ address: '0x18B13d1D60ed35C6A700A939AA17c1AdB4002517',
+  privateKey: '0x369b224ff734ee7863086f84be9cb5b80322b49b3935effa9fd4ba6f334e8e93',
+  publicKey: '3a1b15d7f542e4ebe65be15af1b6024938a17d31e57867f919806cce7137c9147a30744c307b8ac8541b050547bb5a9dd58deec918fcd3cf517b42f0fc0ffbeb' }
 ```
 
 
@@ -62,6 +64,7 @@ datum.transfer(10000000000000000000)
     console.log(error);
 })
 ```
+
 
 
 ### Calculate Storage Costs, e.g. 1MB for 365 days
