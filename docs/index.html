@@ -282,7 +282,9 @@ well as purchasing and selling data on the Datum Marketplace.</p>
 <blockquote>
 <p>Datum Instance</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="nx">DatumEndpoint</span><span class="p">,</span> <span class="p">[</span><span class="nx">StorageEndpoint</span><span class="p">,</span> <span class="nx">PrivateKey</span><span class="p">]);</span>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="nx">DatumEndpoint</span><span class="p">,</span> <span class="p">[</span><span class="nx">StorageEndpoint</span><span class="p">,</span> <span class="nx">PrivateKey</span><span class="p">]);</span>
 </code></pre>
 <p>The DatumEndpoint represents any Datum Blockchain HTTP Endpoint, whereas StorageEndpoint is the storage node public HTTP endpoint where the data has been posted and PrivateKey is the identifier of the user.
 In order to store data on the Datum Network, a datum identity must have been generated with sufficient balance of DAT coins.
@@ -299,13 +301,11 @@ The StorageEndpoint and Private key are optional if no transactions to storage n
 <blockquote>
 <p>createIdentity</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">datum</span><span class="p">.</span><span class="nx">createIdentity</span><span class="p">()</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">identity</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-<span class="p">})</span>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="nx">identity</span> <span class="o">=</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">createIdentity</span><span class="p">();</span>
 </code></pre>
 <p>Once that has been transacted, a public/private key and a wallet address will be provided.
 The private key must be kept secure for future decryption and third party data encryption.</p>
@@ -316,33 +316,20 @@ The assigned space is affiliated with the private key.</p>
 <blockquote>
 <p>Contract</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code>
-<span class="kr">const</span> <span class="nx">DatumClient</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../src/Datum'</span><span class="p">);</span>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
 
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
 
-<span class="kd">let</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DatumClient</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">prepareData</span><span class="p">(</span><span class="s1">'{"userId":1,"id":1,"title":"sunt aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}'</span><span class="p">);</span>
 
-
-<span class="kd">let</span> <span class="nx">ident</span><span class="p">;</span>
-
-<span class="nx">client</span><span class="p">.</span><span class="nx">createIdentity</span><span class="p">()</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">identity</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">ident</span> <span class="o">=</span> <span class="nx">identity</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">createInitStorageTransaction</span><span class="p">(</span><span class="nx">identity</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">tx</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="c1">//remove 0x from private key</span>
-    <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">signRawTransaction</span><span class="p">(</span><span class="nx">tx</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">ident</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="s1">'hex'</span><span class="p">));</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">signedTransaction</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">sendSignedTransaction</span><span class="p">(</span><span class="nx">signedTransaction</span><span class="p">);</span>
-<span class="p">})</span>
+<span class="nx">datum</span><span class="p">.</span><span class="nx">initStorage</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="s1">'PROFILE_DATA'</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">'sample'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">encryptedSecret</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">})</span>
-<span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">);</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-<span class="p">});</span>
+<span class="p">})</span>
 </code></pre><h1 id='encryption'>Encryption</h1>
 <p>Datum values the security of user’s data first. The diagram below highlights the procedure on how to secure the data. The box represents a block on the blockchain and the data is encrypted
 with two layers.</p>
@@ -355,7 +342,11 @@ with two layers.</p>
 <p>PrepareData</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code>
-<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">prepareData</span><span class="p">(</span><span class="s1">'123'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">prepareData</span><span class="p">(</span><span class="s1">'{"userId":1,"id":1,"title":"sunt aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}'</span><span class="p">);</span>
 
 </code></pre><h1 id='storage'>Storage</h1><h2 id='verification'>Verification</h2>
 <p>To confirm whether the developer account has been deposited on the blockchain, one can verify through the function canStoreData.</p>
@@ -364,13 +355,12 @@ with two layers.</p>
 <p>canStoreData</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code>
-<span class="kr">const</span> <span class="nx">DatumClient</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../src/Datum'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
 
-
-<span class="kd">let</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DatumClient</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
 
 <span class="c1">//check if user can store data (checks if deposit for address exists)</span>
-<span class="nx">client</span><span class="p">.</span><span class="nx">createIdentity</span><span class="p">()</span>
+<span class="nx">datum</span><span class="p">.</span><span class="nx">createIdentity</span><span class="p">()</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">identity</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">canStoreData</span><span class="p">(</span><span class="nx">identity</span><span class="p">.</span><span class="nx">address</span><span class="p">);</span>
 <span class="p">})</span>
@@ -387,7 +377,12 @@ The example is for 1MB of storage for 365 days.</p>
 <blockquote>
 <p>getStorageCosts</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">datum</span><span class="p">.</span><span class="nx">getStorageCosts</span><span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">365</span><span class="p">)</span>
+<pre class="highlight javascript tab-javascript"><code>
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
+<span class="nx">datum</span><span class="p">.</span><span class="nx">getStorageCosts</span><span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">365</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">costs</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">costs</span><span class="p">);</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">toDAT</span><span class="p">(</span><span class="nx">costs</span><span class="p">));</span>
@@ -405,6 +400,10 @@ The example is for 1MB of storage for 365 days.</p>
 <p>Initializing Storage to Datum Blockchain</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code>
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
 <span class="nx">datum</span><span class="p">.</span><span class="nx">initStorage</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s1">'EMAIL'</span><span class="p">,</span> <span class="nx">merkle_root</span><span class="p">,</span> <span class="s1">'private'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
@@ -415,6 +414,10 @@ The example is for 1MB of storage for 365 days.</p>
 <span class="p">})</span>
 
 <span class="nx">Set</span><span class="o">/</span><span class="nx">Upload</span> <span class="nx">Data</span> <span class="nx">to</span> <span class="nx">node</span>
+
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
 
 <span class="nx">datum</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -427,7 +430,12 @@ The example is for 1MB of storage for 365 days.</p>
 <blockquote>
 <p>Set/Upload Data to node with Key value assigned</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">datum</span><span class="p">.</span><span class="nx">setWithKey</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s2">"key_name"</span><span class="p">)</span>
+<pre class="highlight javascript tab-javascript"><code>
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
+<span class="nx">datum</span><span class="p">.</span><span class="nx">setWithKey</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s2">"key_name"</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">})</span>
@@ -438,7 +446,11 @@ The example is for 1MB of storage for 365 days.</p>
 <blockquote>
 <p>Set/Upload Data to node with init Storage</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">datum</span><span class="p">.</span><span class="nx">setAndInit</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s1">'EMAIL'</span><span class="p">,</span> <span class="nx">merkle_root</span><span class="p">,</span> <span class="s1">'private'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
+<span class="nx">datum</span><span class="p">.</span><span class="nx">setAndInit</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s1">'EMAIL'</span><span class="p">,</span> <span class="nx">merkle_root</span><span class="p">,</span> <span class="s1">'private'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">})</span>
@@ -453,6 +465,10 @@ The example is for 1MB of storage for 365 days.</p>
 <p>Get data from storage mode</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code>
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
 <span class="nx">datum</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
@@ -464,7 +480,12 @@ The example is for 1MB of storage for 365 days.</p>
 <blockquote>
 <p>Get data from storage node using key value</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">datum</span><span class="p">.</span><span class="nx">getWithKey</span><span class="p">(</span><span class="s2">"key_name"</span><span class="p">)</span>
+<pre class="highlight javascript tab-javascript"><code>
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
+<span class="nx">datum</span><span class="p">.</span><span class="nx">getWithKey</span><span class="p">(</span><span class="s2">"key_name"</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">})</span>
@@ -477,7 +498,11 @@ The example is for 1MB of storage for 365 days.</p>
 <blockquote>
 <p>Remove</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">datum</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
+<span class="nx">datum</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">})</span>
