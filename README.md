@@ -3,9 +3,10 @@
 
 npm install datum-sdk --save
 
-## Full Documentation
+## Documentations
 
-## Examples
+[Getting Started](https://gettingstarted.datum.org/)
+
 
 ### Create new Instance
 
@@ -35,6 +36,8 @@ PrivateKey	[Optional] If identy already exists, identify yourself with the key
 
 ### Create Identity
 
+*creates an identity object with public/private key and public address*
+
 ```
 datum.createIdentity()
 .then(identity => {
@@ -48,6 +51,8 @@ datum.createIdentity()
 
 ### Transfer to Datum Blockchain
 
+*transfer DAT from Ethereum to Datum Blockchain*
+
 ```
 datum.transfer(10000000000000000000)
 .then(result => {
@@ -60,6 +65,8 @@ datum.transfer(10000000000000000000)
 
 
 ### Calculate Storage Costs, e.g. 1MB for 365 days
+
+*calculcate the storage costs for given size and duration*
 
 ```
 datum.getStorageCosts(1024 * 1024, 365)
@@ -84,6 +91,8 @@ var data = datum.prepareData('123');
 
 ### Init Storage to Datum Blockchain
 
+*init storage in smart contract*
+
 ```
 datum.initStorage(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
 .then(result => {
@@ -98,6 +107,8 @@ datum.initStorage(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
 
 ### Upload / Set the data to storage node and init in same turn
 
+*init storage in smart contract and upload data in same turn*
+
 ```
 datum.setAndInit(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
 .then(result => {
@@ -110,6 +121,8 @@ datum.setAndInit(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
 
 
 ### Upload / Set the data to storage node (initStorage already done)
+
+*set/upload data to a storage node*
 
 ```
 datum.set(data)
@@ -124,6 +137,8 @@ datum.set(data)
 
 ### Upload / Set the data to storage node with key assigned
 
+*set/upload data to a storage node with a keyname*
+
 ```
 datum.setWithKey(data, "key_name")
 .then(result => {
@@ -136,6 +151,8 @@ datum.setWithKey(data, "key_name")
 
 
 ### Download / Get the data to storage node
+
+*get/download data from storage node*
 
 ```
 datum.get(data.id)
@@ -150,6 +167,8 @@ datum.get(data.id)
 
 ### Download / Get the data from storage node by keyname
 
+*get/download data from storage node with key name*
+
 ```
 datum.getWithKey("key_name")
 .then(result => {
@@ -162,6 +181,8 @@ datum.getWithKey("key_name")
 
 
 ### Remove the data to storage node
+
+*remove data from storage node*
 
 ```
 datum.remove(data.id)
