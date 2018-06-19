@@ -12,12 +12,60 @@ var Datum = require('../index');
 
 //1. Create Identity
 var ident = { address: '0x348f3dbD1F99D735aB7fbB2fB0d56a6Ecc89EAAD',privateKey: '0x23b3c65fbdd71b5511f1a2072f2ec8699d1aed16259f4721a64dc61316f96f2f',publicKey: '1af89cd0f9d6abd3ea1496a1c0de9df747aea0ef205e6e6e72c3e2104fd46a210e414ec9ca547c0b05cb11ce9696fdc325187f26ecff6774f0af822288f68149'};
-var p = new Datum("http://localhost:8545", "", ident.privateKey);
+//var datum = new Datum("http://localhost:8545", "", ident.privateKey);
+
+
+//var identity = datum.createIdentity();
+//console.log(identity);
+
+let datum = new Datum("https://node-us-west.datum.org/api","https://node-us-west.datum.org/storage", ident.privateKey);
+
+
+var data = datum.prepareData('{"userId":1,"id":1,"title":"sunt aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
+
+datum.initStorage(data, 'PROFILE_DATA', '', 'sample', 0, 1, 360, "metadata")
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+
+/*
+var x = datum.transfer(10000000000000000000)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+/*
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", ident.privateKey);
+
+var data = datum.prepareData('{"userId":1,"id":1,"title":"sunt aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
+
+datum.initStorage(data.id, 'PROFILE_DATA', '', 'sample', 0, 1, 360, data.encryptedSecret)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
 
 
 //2. Transfer 10 DAT's from Rinkeby to sidechain)
+
+
 /*
-var x = p.transfer(10000000000000000000)
+var x = datum.transfer(10000000000000000000)
 .then(result => {
     console.log(result);
 })
@@ -44,8 +92,10 @@ p.getStorageCosts(1024 * 1024, 365)
 
 
 //4. prepare data for network
+/*
 var data = p.storageManager.prepareData('123');
 console.log(data);
+*/
 
 //5. add storage request to smart contract
 

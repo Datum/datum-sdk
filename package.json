@@ -1,6 +1,6 @@
 {
   "name": "datum-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "javascript API for datum network",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,7 @@
     "eth-ecies": "^1.0.3",
     "ethereumjs-tx": "^1.3.4",
     "ethereumjs-util": "^5.2.0",
+    "merkle-tools": "^1.4.0",
     "scrypt": "^6.0.3",
     "web3": "^1.0.0-beta.34"
   }

@@ -197,3 +197,11 @@ datum.remove(data.id)
 });
 ```
 
+
+### Set private key
+
+*set the private/developer key after datum instace already exists*
+
+```
+datum.setDeveloperKey(data.id)
+```
