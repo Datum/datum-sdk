@@ -53,7 +53,7 @@ Result
 
 ### Transfer to Datum Blockchain
 
-*transfer DAT from Ethereum to Datum Blockchain*
+*transfer DAT (in wei) from Ethereum to Datum Blockchain*
 
 ```
 datum.transfer(10000000000000000000)
@@ -97,7 +97,7 @@ var data = datum.prepareData('123');
 *init storage in smart contract*
 
 ```
-datum.initStorage(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
+datum.initStorage(data, "Profiles", "sample_category",1,1,360, "metaData")
 .then(result => {
     console.log(result);
 })
@@ -113,7 +113,7 @@ datum.initStorage(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
 *init storage in smart contract and upload data in same turn*
 
 ```
-datum.setAndInit(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
+datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData")
 .then(result => {
     console.log(result);
 })
