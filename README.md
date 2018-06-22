@@ -92,6 +92,48 @@ var data = datum.prepareData('123');
 ```
 
 
+### Deposit some DAT tokens to storage contract
+
+*transfer 10 DAT from your wallet in Datum Blockchain to the storage smart contract*
+
+```
+datum.deposit(10)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+})
+```
+
+
+
+### Full Flow
+
+*represent a full flow from deposit to storage contract init and upload some data and retrieve the data back*
+
+```
+var data = datum.prepareData('Some sample data');
+
+datum.deposit(10)
+.then(result => {
+    console.log('deposit done');
+    return datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData");
+})
+.then(result => {
+    console.log('upload done');
+    return datum.get(data.id);
+})
+.then(result => {
+    console.log('download done');
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+```
+
 ### Init Storage to Datum Blockchain
 
 *init storage in smart contract*
@@ -205,3 +247,37 @@ datum.remove(data.id)
 ```
 datum.setDeveloperKey(data.id)
 ```
+
+
+### Events
+
+*you can catch several events for all blockchain related methods*
+
+
+```
+
+Getting the raw transaction before signing
+
+datum.events().on('beforeSignTransaction', (tx) => {
+    console.log(tx);
+});
+
+Getting the signed transaction
+
+datum.events().on('afterSignTransaction', (txSigned) => {
+    console.log(txSigned);
+});
+
+Getting the transaction hash after the broadcast to network
+
+datum.events().on('transactionHash', (hash) => {
+    console.log(hash);
+});
+
+Getting the block information where the transaction was mined in
+
+datum.events().on('receipt', (receipt) => {
+    console.log(receipt);
+});
+
+ ```

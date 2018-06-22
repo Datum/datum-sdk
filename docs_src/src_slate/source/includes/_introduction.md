@@ -55,7 +55,7 @@ https://node-eu.datum.org/api
 > Public StorageEndpoint
 
 ```javascript
-https://node-us-west.datum.org/storage
+https://node-eu-west.datum.org/storage
 ```
 
 > Faucet some DAT for Rinkeby Testnet under

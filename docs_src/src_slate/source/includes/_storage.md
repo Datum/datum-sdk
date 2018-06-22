@@ -62,7 +62,7 @@ const Datum = require('datum-sdk');
 
 let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
 
-datum.initStorage(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
+datum.initStorage(data, "User_Profiles", "category",1,1,360, "metaData")
 .then(result => {
     console.log(result);
 })
@@ -110,7 +110,7 @@ const Datum = require('datum-sdk');
 
 let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
 
-datum.setAndInit(data, 'EMAIL', merkle_root, 'private', 0, 1, 360)
+datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData")
 .then(result => {
     console.log(result);
 })
@@ -157,9 +157,39 @@ datum.getWithKey("key_name")
     console.log(error);
 });
 ```
+
+>Full flow
+
+```javascript
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
+var data = .....
+
+datum.deposit(10)
+.then(result => {
+    console.log('deposit done');
+    return datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData");
+})
+.then(result => {
+    console.log('inti done');
+    return datum.get(data.id);
+})
+.then(result => {
+    console.log('download done');
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+```
+
 ##Delete
 
-Utilize the remove method to permanently delete the data from the blockchain
+Utilize the remove method to permanently delete the data storage node
 
 >Remove
 
