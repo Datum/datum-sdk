@@ -244,10 +244,10 @@
             <a href="#storage" class="toc-h1 toc-link" data-title="storage">Storage</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#verification" class="toc-h2 toc-link" data-title="verification">Verification</a>
+                    <a href="#storage-cost" class="toc-h2 toc-link" data-title="storage-cost">Storage Cost</a>
                   </li>
                   <li>
-                    <a href="#storage-cost" class="toc-h2 toc-link" data-title="storage-cost">Storage Cost</a>
+                    <a href="#full-flow" class="toc-h2 toc-link" data-title="full-flow">Full Flow</a>
                   </li>
                   <li>
                     <a href="#upload" class="toc-h2 toc-link" data-title="upload">Upload</a>
@@ -311,13 +311,13 @@ You can check this with https://rinkeby.etherscan.io/address/[wallet address]</p
 <blockquote>
 <p>Public StorageEndpoint</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">https</span><span class="p">:</span><span class="c1">//node-us-west.datum.org/storage</span>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">https</span><span class="p">:</span><span class="c1">//node-eu-west.datum.org/storage</span>
 </code></pre>
 <blockquote>
 <p>Faucet some DAT for Rinkeby Testnet under</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code>
-<span class="nl">DAT</span><span class="p">:</span>    <span class="nl">http</span><span class="p">:</span><span class="c1">//52.232.119.164:8081/v1/faucet/dat/[wallet address]</span>
+<span class="nl">http</span><span class="p">:</span><span class="c1">//52.232.119.164:8081/v1/faucet/dat/[wallet address]</span>
 </code></pre><h1 id='authentication'>Authentication</h1><h2 id='creating-a-developer-account-on-datum'>Creating a developer account on Datum</h2>
 <p>The first step is to create an account on Datum using the createIdentity function.</p>
 
@@ -345,7 +345,7 @@ The assigned space is affiliated with the private key.</p>
 
 <span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">prepareData</span><span class="p">(</span><span class="s1">'{"userId":1,"id":1,"title":"sunt aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}'</span><span class="p">);</span>
 
-<span class="nx">datum</span><span class="p">.</span><span class="nx">initStorage</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="s1">'PROFILE_DATA'</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">'sample'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">encryptedSecret</span><span class="p">)</span>
+<span class="nx">datum</span><span class="p">.</span><span class="nx">initStorage</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="s1">'PROFILE_DATA'</span><span class="p">,</span> <span class="s1">'sample'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="s2">"metadata"</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">})</span>
@@ -371,29 +371,9 @@ with two layers.</p>
 
 <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">prepareData</span><span class="p">(</span><span class="s1">'{"userId":1,"id":1,"title":"sunt aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}'</span><span class="p">);</span>
 
-</code></pre><h1 id='storage'>Storage</h1><h2 id='verification'>Verification</h2>
-<p>To confirm whether the developer account has been deposited on the blockchain, one can verify through the function canStoreData.</p>
-
-<blockquote>
-<p>canStoreData</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code>
-<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
-
-<span class="c1">//check if user can store data (checks if deposit for address exists)</span>
-<span class="nx">datum</span><span class="p">.</span><span class="nx">createIdentity</span><span class="p">()</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">identity</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">canStoreData</span><span class="p">(</span><span class="nx">identity</span><span class="p">.</span><span class="nx">address</span><span class="p">);</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre><h2 id='storage-cost'>Storage Cost</h2>
+</code></pre>
+<p>The return is a object with id, encryptedData and encryptedSecret properties.</p>
+<h1 id='storage'>Storage</h1><h2 id='storage-cost'>Storage Cost</h2>
 <p>Use the method getStorageCosts to obtain the cost associated with uploading data on the Datum Blockchain based on size of data in [units] and duration of storage in [units].
 The example is for 1MB of storage for 365 days.</p>
 
@@ -414,20 +394,58 @@ The example is for 1MB of storage for 365 days.</p>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">);</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
 <span class="p">})</span>
-</code></pre><h2 id='upload'>Upload</h2>
-<p>Once the encryption and verification process has been concluded, the data can now be uploaded to the Datum network through the uploadData function. There are three parts to storing data on the network.</p>
-
-<p><img src="images/upload.png" alt="Upload" /></p>
+</code></pre><h2 id='full-flow'>Full Flow</h2>
+<p>This describes a full flow to interact with Datum Blockchain
+- prepare some data for upload to the network (create secret, encrypt data)
+- deposit some DAT to contract
+- initalize a storage contract in blockchain
+- upload some data
+- download some data</p>
 
 <blockquote>
-<p>Initializing Storage to Datum Blockchain</p>
+<p>Full flow</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code>
 <span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
 
 <span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
 
-<span class="nx">datum</span><span class="p">.</span><span class="nx">initStorage</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s1">'EMAIL'</span><span class="p">,</span> <span class="nx">merkle_root</span><span class="p">,</span> <span class="s1">'private'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">prepareData</span><span class="p">(</span><span class="s1">'{"use355fsdf4ssrId":3435,"id":1,"title":"sunt asdf aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}'</span><span class="p">);</span>
+
+<span class="nx">datum</span><span class="p">.</span><span class="nx">deposit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deposit done'</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">setAndInit</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s2">"Profiles"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span> <span class="s2">"metaData"</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'inti done'</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'download done'</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre><h2 id='upload'>Upload</h2>
+<p>Once the encryption and verification process has been concluded, the data can now be uploaded to the Datum network through the uploadData function. There are three parts to storing data on the network.</p>
+
+<p><img src="images/upload.png" alt="Upload" /></p>
+
+<blockquote>
+<p>Initializing Storage to Datum Blockchain and upload some data</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code>
+<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">datum</span><span class="p">.</span><span class="nx">prepareData</span><span class="p">(</span><span class="s1">'{"use355fsdf4ssrId":3435,"id":1,"title":"sunt asdf aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}'</span><span class="p">);</span>
+
+
+<span class="nx">datum</span><span class="p">.</span><span class="nx">setAndInit</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s2">"User_Profiles"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span> <span class="s2">"metaData"</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">})</span>
@@ -435,10 +453,9 @@ The example is for 1MB of storage for 365 days.</p>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">);</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
 <span class="p">})</span>
-
-<span class="nx">Set</span><span class="o">/</span><span class="nx">Upload</span> <span class="nx">Data</span> <span class="nx">to</span> <span class="nx">node</span>
-
-<span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
+</code></pre>
+<p>Set/Upload Data to node after the storage is initalized</p>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
 
 <span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
 
@@ -453,6 +470,8 @@ The example is for 1MB of storage for 365 days.</p>
 <blockquote>
 <p>Set/Upload Data to node with Key value assigned</p>
 </blockquote>
+
+<p>Upload some data with given key name</p>
 <pre class="highlight javascript tab-javascript"><code>
 <span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
 
@@ -465,28 +484,14 @@ The example is for 1MB of storage for 365 days.</p>
 <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
 <span class="p">});</span>
-</code></pre>
-<blockquote>
-<p>Set/Upload Data to node with init Storage</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">datum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datum</span><span class="p">(</span><span class="s2">"https://node-us-west.datum.org/api"</span><span class="p">,</span> <span class="s2">"https://node-eu-west.datum.org/storage"</span><span class="p">,</span> <span class="p">[</span><span class="nx">privateKey</span><span class="p">]);</span>
-
-<span class="nx">datum</span><span class="p">.</span><span class="nx">setAndInit</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s1">'EMAIL'</span><span class="p">,</span> <span class="nx">merkle_root</span><span class="p">,</span> <span class="s1">'private'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-<span class="p">});</span>
-
 </code></pre><h2 id='download'>Download</h2>
-<p>There are two methods to get the data from the storage node on the blockchain; one is through directly using the get Method and the other is by the key value pertaining to the data.</p>
+<p>There are two methods to get the data from the storage node on the blockchain; one is through directly using the id of the data and the other is by the key value pertaining to the data.</p>
 
 <blockquote>
 <p>Get data from storage mode</p>
 </blockquote>
+
+<p>Download </p>
 <pre class="highlight javascript tab-javascript"><code>
 <span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
 
@@ -503,6 +508,8 @@ The example is for 1MB of storage for 365 days.</p>
 <blockquote>
 <p>Get data from storage node using key value</p>
 </blockquote>
+
+<p>Download some data with given key name</p>
 <pre class="highlight javascript tab-javascript"><code>
 <span class="kr">const</span> <span class="nx">Datum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'datum-sdk'</span><span class="p">);</span>
 
@@ -516,7 +523,7 @@ The example is for 1MB of storage for 365 days.</p>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre><h2 id='delete'>Delete</h2>
-<p>Utilize the remove method to permanently delete the data from the blockchain</p>
+<p>Delete data from storage node</p>
 
 <blockquote>
 <p>Remove</p>
