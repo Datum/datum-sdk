@@ -19,4 +19,5 @@ var data = datum.prepareData('{"userId":1,"id":1,"title":"sunt aut facere repell
 
 ```
 
+The return is a object with id, encryptedData and encryptedSecret properties.
 

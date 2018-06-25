@@ -9,8 +9,9 @@ var Datum = require('../index');
 
 
 
-var ident = { address: '0x348f3dbD1F99D735aB7fbB2fB0d56a6Ecc89EAAD', privateKey: '0x23b3c65fbdd71b5511f1a2072f2ec8699d1aed16259f4721a64dc61316f96f2f', publicKey: '1af89cd0f9d6abd3ea1496a1c0de9df747aea0ef205e6e6e72c3e2104fd46a210e414ec9ca547c0b05cb11ce9696fdc325187f26ecff6774f0af822288f68149' };
-
+var ident = { address: '0x5297530A87B7A9D5acC3A247514e909442Ca7e59',
+privateKey: '0xf668509deb8b6860d477d7bc7e38068f6491a19283a2782d244a3146f468c27e',
+publicKey: 'f8cea1b3b439b00215e01e8bfae70c1b2ab09e8b339b9e824f2689df650dda52db7b51afe944b37cb068b1d32de36253275f6f94ba5e11a1ceb501674beafc75' };
 
 /*
 const ident = {
@@ -22,14 +23,10 @@ const ident = {
    */
 
 
-var datum = new Datum("http://40.65.116.213:8545", "http://localhost:8081", ident.privateKey);
+var datum = new Datum("http://40.65.116.213:8545", "https://node-eu-west.datum.org/storage", ident.privateKey);
 
 //data to store
 var data = datum.prepareData('{"use355fsdf4ssrId":3435,"id":1,"title":"sunt asdf aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
-
-
-data.id = '0xed85f90ebae04e7fd60ca4bb56cf4b1ae7afcba1f95b5a7c70342330bc0e84eb';
-
 
 
 
@@ -54,20 +51,58 @@ datum.events().on('receipt', (receipt) => {
     console.log('mined');
     console.log(receipt);
 });
-
 */
 
 
-/*
-datum.setAndInit(data, "User_Profiles", "category",1,1,360, "metaData")
-.then(result => {
-    console.log(result);
-    console.log('mined wait for confirmation');
 
+datum.deposit(10)
+.then(result => {
+    console.log('deposit done');
+    return datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData");
+})
+.then(result => {
+    console.log('upload done');
     return datum.get(data.id);
 })
 .then(result => {
+    console.log('download done');
     console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+
+/*
+
+datum.setAndInit(data, "User_Profiles", "category",1,1,360, "metaData")
+.then(result => {
+    console.log('storage init done...');
+    return datum.get(data.id);
+})
+.then(result => {
+    console.log('get actual data');
+    console.log(result);
+    var newData = datum.updateData(data, 'NEW DATA CONTENT');
+    return datum.set(newData);
+})
+.then(result => {
+    console.log('data updated');
+    return datum.get(data.id);
+})
+.then(result => {
+    console.log('get actual data');
+    console.log(result)
+    var newData = datum.updateData(data, 'ANOTHER NEW CONTENT OF DATA');
+    return datum.set(newData);
+})
+.then(result => {
+    console.log('data updated');
+    return datum.get(data.id);
+})
+.then(result => {
+    console.log('get actual data');
+    console.log(result)
 })
 .catch(error => {
     console.log(error);
@@ -75,7 +110,7 @@ datum.setAndInit(data, "User_Profiles", "category",1,1,360, "metaData")
 */
 
 
-
+/*
 datum.get(data.id)
 .then(result => {
     console.log(result);
@@ -84,12 +119,13 @@ datum.get(data.id)
     console.log('error');
     console.log(error);
 })
+*/
 
 
+
+/*
 var newData = datum.prepareData('{"AAAAAA":3435,"id":1,"title":"sunt asdf aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
-
-
-newData.id = '0xed85f90ebae04e7fd60ca4bb56cf4b1ae7afcba1f95b5a7c70342330bc0e84eb';
+newData.id = data.id;
 
 
 
@@ -102,6 +138,7 @@ datum.set(newData)
     console.log('error');
     console.log(error);
 })
+
 
 
 datum.get(newData.id)

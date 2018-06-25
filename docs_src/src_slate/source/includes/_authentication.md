@@ -31,7 +31,7 @@ let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-wes
 
 let data = datum.prepareData('{"userId":1,"id":1,"title":"sunt aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
 
-datum.initStorage(data.id, 'PROFILE_DATA', '', 'sample', 0, 1, 360, data.encryptedSecret)
+datum.initStorage(data.id, 'PROFILE_DATA', 'sample', 0, 1, 360, "metadata")
 .then(result => {
     console.log(result);
 })

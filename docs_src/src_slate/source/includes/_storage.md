@@ -1,28 +1,4 @@
 # Storage
-##Verification
-
-To confirm whether the developer account has been deposited on the blockchain, one can verify through the function canStoreData.
-
->canStoreData
-
-```javascript
-
-const Datum = require('datum-sdk');
-
-let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
-
-//check if user can store data (checks if deposit for address exists)
-datum.createIdentity()
-.then(identity => {
-    return client.canStoreData(identity.address);
-})
-.then(result => {
-    console.log(result);
-})
-.catch((error) => {
-    console.log(error);
-});
-```
 
 ##Storage Cost
 
@@ -48,115 +24,14 @@ datum.getStorageCosts(1024 * 1024, 365)
 })
 ```
 
-##Upload
+##Full Flow
 
-Once the encryption and verification process has been concluded, the data can now be uploaded to the Datum network through the uploadData function. There are three parts to storing data on the network.
-
-![](upload.png)
-
-> Initializing Storage to Datum Blockchain
-
-```javascript
-
-const Datum = require('datum-sdk');
-
-let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
-
-datum.initStorage(data, "User_Profiles", "category",1,1,360, "metaData")
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log('error');
-    console.log(error);
-})
-
-Set/Upload Data to node
-
-const Datum = require('datum-sdk');
-
-let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
-
-datum.set(data)
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
-> Set/Upload Data to node with Key value assigned
-
-```javascript
-
-const Datum = require('datum-sdk');
-
-let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
-
-datum.setWithKey(data, "key_name")
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
->Set/Upload Data to node with init Storage
-
-```javascript
-const Datum = require('datum-sdk');
-
-let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
-
-datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData")
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-
-```
-##Download
-
-There are two methods to get the data from the storage node on the blockchain; one is through directly using the get Method and the other is by the key value pertaining to the data.
-
-
->Get data from storage mode
-
-```javascript
-
-const Datum = require('datum-sdk');
-
-let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
-
-datum.get(data.id)
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
->Get data from storage node using key value
-
-```javascript
-
-const Datum = require('datum-sdk');
-
-let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
-
-datum.getWithKey("key_name")
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
+This describes a full flow to interact with Datum Blockchain
+- prepare some data for upload to the network (create secret, encrypt data)
+- deposit some DAT to contract
+- initalize a storage contract in blockchain
+- upload some data
+- download some data
 
 >Full flow
 
@@ -166,7 +41,7 @@ const Datum = require('datum-sdk');
 
 let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
 
-var data = .....
+var data = datum.prepareData('{"use355fsdf4ssrId":3435,"id":1,"title":"sunt asdf aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
 
 datum.deposit(10)
 .then(result => {
@@ -187,9 +62,116 @@ datum.deposit(10)
 })
 ```
 
+
+
+##Upload
+
+Once the encryption and verification process has been concluded, the data can now be uploaded to the Datum network through the uploadData function. There are three parts to storing data on the network.
+
+![](upload.png)
+
+> Initializing Storage to Datum Blockchain and upload some data
+
+```javascript
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
+var data = datum.prepareData('{"use355fsdf4ssrId":3435,"id":1,"title":"sunt asdf aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
+
+
+datum.setAndInit(data, "User_Profiles", "category",1,1,360, "metaData")
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+```
+
+Set/Upload Data to node after the storage is initalized
+
+```javascript
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
+datum.set(data)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
+> Set/Upload Data to node with Key value assigned
+
+Upload some data with given key name
+
+```javascript
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
+datum.setWithKey(data, "key_name")
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
+##Download
+
+There are two methods to get the data from the storage node on the blockchain; one is through directly using the id of the data and the other is by the key value pertaining to the data.
+
+
+>Get data from storage mode
+
+Download 
+
+```javascript
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
+datum.get(data.id)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
+>Get data from storage node using key value
+
+Download some data with given key name
+
+```javascript
+
+const Datum = require('datum-sdk');
+
+let datum = new Datum("https://node-us-west.datum.org/api", "https://node-eu-west.datum.org/storage", [privateKey]);
+
+datum.getWithKey("key_name")
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
+```
+
 ##Delete
 
-Utilize the remove method to permanently delete the data storage node
+Delete data from storage node
 
 >Remove
 
