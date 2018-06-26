@@ -1,0 +1,21 @@
+{
+  "name": "datum-sdk",
+  "version": "0.0.14",
+  "description": "javascript API for datum network",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "florian@datum.org",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "eth-crypto": "^1.2.1",
+    "eth-ecies": "^1.0.3",
+    "ethereumjs-tx": "^1.3.4",
+    "ethereumjs-util": "^5.2.0",
+    "merkle-tools": "^1.4.0",
+    "scrypt": "^6.0.3",
+    "web3": "^1.0.0-beta.34"
+  }
+}
