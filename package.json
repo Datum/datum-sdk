@@ -1,13 +1,14 @@
 {
   "name": "datum-sdk",
   "version": "0.0.14",
-  "description": "javascript API for datum network",
+  "description": "Javascript SDK for the Datum Network, see https://datum.org for more information",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "florian@datum.org",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://datum.org",
   "dependencies": {
     "crypto-js": "^3.1.9-1",
     "eth-crypto": "^1.2.1",
