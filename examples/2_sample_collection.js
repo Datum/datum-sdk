@@ -23,12 +23,339 @@ const ident = {
    */
 
 
-var datum = new Datum("http://40.65.116.213:8545", "https://node-eu-west.datum.org/storage", ident.privateKey);
-
-//data to store
-var data = datum.prepareData('{"use355fsdf4ssrId":3435,"id":1,"title":"sunt asdf aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
 
 
+
+//var ident = Datum.hash('adfasdfasdfasdf');
+//console.log(ident);
+
+
+
+var datum = new Datum();
+
+datum.initialize({
+    privateKey : ident.privateKey,
+    developerPublicKey : '81f67be218c87536f6f668848df809f9e82855b076d60c98a480837d4d8a21ecaa7f3c2d68645c3a1b11887832719ea76262c7448ae65cc7ed25dad63e2068f5'
+    /*
+    network: "",
+    storage: ""
+    */
+});
+
+console.log(Datum.prepareData("adfasdfasdf"));
+
+
+
+/*
+datum.set(data, "email", "email","any meta data",1,1,360)
+.then(data => {
+    console.log(data);
+});
+*/
+
+
+/*
+var tt = Datum.publicKeyToAddress('81f67be218c87536f6f668848df809f9e82855b076d60c98a480837d4d8a21ecaa7f3c2d68645c3a1b11887832719ea76262c7448ae65cc7ed25dad63e2068f5');
+console.log(tt);
+*/
+
+/*
+var data ="peterflorain@datum.org";
+
+
+var ddd = datum.prepareData(data);
+*/
+//console.log(ddd);
+
+/*
+datum.get("0xb57f5f92f8931e044f59d54f7f2a445e5dd274e16599f104a61a8dd4cfa5b0fa")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+/*
+datum.set(data, "email", "email","any meta data",1,1,360)
+.then(data => {
+    console.log(data);
+});
+*/
+
+/*
+datum.getWithKey("email")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
+/*
+datum.getWithKey("email")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+/*
+datum.set(data, "email", "email","any meta data",1,1,360)
+.then(data => {
+    console.log(data);
+});
+*/
+
+
+/*
+datum.get("0xb57f5f92f8931e044f59d54f7f2a445e5dd274e16599f104a61a8dd4cfa5b0fa")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+/*
+datum.get("0x7ec182d98b6a053e4f22cb98c9f56e080f4f7791314e759387f6dc23bf45b840")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+/*
+datum.set(data, "email", "email","any meta data",1,1,360)
+.then(data => {
+    console.log(data);
+});
+*/
+
+
+/*
+datum.getWithKey("email")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
+/*
+datum.set(data, "email", "email","any meta data",1,1,360)
+.then(data => {
+    console.log(data);
+});
+*/
+
+
+/*
+datum.get("0x6b20f47cddf29d2098457233fdafe048b69ed530e3701222608a754c7be4b76b")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
+/*
+datum.get("0xa5632e7b9a194d5295bfcbbed94900a0d8f95f3e5ce05cc712f52ec0416cbeb5")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
+
+/*
+datum.remove("0xa5632e7b9a194d5295bfcbbed94900a0d8f95f3e5ce05cc712f52ec0416cbeb5")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+/*
+datum.deposit(10)
+.then(result => {
+    console.log('deposit done');
+})
+*/
+
+/*
+datum.getIdsForKey("email")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+/*
+datum.getIdsForKey("email")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+/*
+datum.set(data, "email", "email","any meta data",1,1,360)
+.then(data => {
+    console.log(data);
+});
+*/
+
+
+/*
+datum.get("0xa5632e7b9a194d5295bfcbbed94900a0d8f95f3e5ce05cc712f52ec0416cbeb5")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
+
+
+/*
+[ '0x22955759a56d1ea036b9a8aae83613434ae6c05571f5c722f8d61587fbab5406',
+  '0x40c2ac79045a29c76f861dc147bb6488d589e696b3854381755171e3cdf0e47e',
+  '0x2b8922eefc6d4e485fd21f60aff4a4b06c917be328f9b8c4cdc20c046eedfe61',
+  '0x8cb808294a74e7b638745f208ded2e7b4c37d80e79e2d6e2322f794f48d4e737',
+  '0x781e1df1f8c37e1f1ebb4424b9ddb865d71c4e4661e42867024d4cbf3dc06028',
+  '0xa5632e7b9a194d5295bfcbbed94900a0d8f95f3e5ce05cc712f52ec0416cbeb5' ]
+
+datum.getIdsForKey("email")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+/*
+datum.getWithKey("email")
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
+/*
+datum.set(data, "email", "email","any meta data",1,1,360)
+.then(data => {
+    console.log(data);
+});
+*/
+
+
+
+
+/*datum.getWithKey("Email")
+.then(data => {
+    console.log(data);
+});
+*/
+
+/*
+datum.set(data, "OTHERKEY", "category","metaData",1,1,360)
+.then(result => {
+    console.log(result);
+    return datum.getWithKey("SAMPLE_KEY");
+})
+.then(result => {
+    console.log(result);
+    return datum.getWithKey("OTHERKEY");
+})
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+/*
+datum.set(data, "Profiles", "category","metaData",1,1,360, true)
+.then(result => {
+    console.log(result);
+    return datum.get(result);
+})
+.then(getData => {
+    console.log(getData);
+    data =JSON.stringify("TESTSETSETSETEST");
+    return datum.set(data, "Profiles", "category","metaData",1,1,360);
+})
+.then(result => {
+    console.log(result);
+    return datum.get(result);
+})
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
+//data to store//
+//var data = datum.prepareData('{"use355fsdf4ssrId":3435,"id":1,"title":"sunt asdf aut facere repellat provident occaecati excepturi optio reprehenderit","body":"quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"}');
+
+
+//console.log(data);
+
+/*
+var x = datum.transfer(10000000000000000000)
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})*/
 
 
 /*
@@ -54,15 +381,35 @@ datum.events().on('receipt', (receipt) => {
 */
 
 
+//var data =JSON.stringify({"use355fsdf4ssrId":3435,"id":1});
 
+/*
+
+*/
+
+
+/*
+datum.getWithKey('Profiles')
+.then(result => {
+
+})
+.catch(error => {
+    console.log('error');
+    console.log(error);
+})
+*/
+
+
+/*
 datum.deposit(10)
 .then(result => {
     console.log('deposit done');
-    return datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData");
+    return datum.set(data, "Profiles", "category","metaData",1,1,360);
 })
 .then(result => {
+    //result is id of data
     console.log('upload done');
-    return datum.get(data.id);
+    return datum.get(result);
 })
 .then(result => {
     console.log('download done');
@@ -72,6 +419,8 @@ datum.deposit(10)
     console.log('error');
     console.log(error);
 })
+*/
+
 
 /*
 
