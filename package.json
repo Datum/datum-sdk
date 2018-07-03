@@ -1,13 +1,13 @@
 {
   "name": "datum-sdk",
-  "version": "0.0.16",
+  "version": "0.1.2",
   "description": "javascript API for datum network",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "florian@datum.org",
-  "license": "ISC",
+  "license": "see LICENSE",
   "dependencies": {
     "async-request": "^1.2.0",
     "crypto-js": "^3.1.9-1",
