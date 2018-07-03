@@ -1,283 +1,280 @@
 # datum-sdk
 *javascript api for Datum Blockchain*
 
+### Install
+
 npm install datum-sdk --save
+
+*npm install builds also the bundled and minified version "datum.js" , "datum.min.js" in /dist folder to include in HTML*
 
 ## Documentations
 
 [Getting Started](https://gettingstarted.datum.org/)
 
-
-### Create new Instance
-
-```
-const Datum = require('datum-sdk');
-
-var datum = new Datum(DatumEndpoint, [StorageEndpoint, PrivateKey]);
-```
-
-DatumEndpoint	Any Datum Blockchain HTTP Endpoint
-
-StorageEndpoint	[Optional] If already clear, set the storage endpoint here
-
-PrivateKey	[Optional] If identy already exists, identify yourself with the key
-
-
-/* stores some data to datum network */
-
-/* You must have a datum identity with DATCoins filled */
-
-/* Faucet some DATS/ETH for Rinkeby Testnet under 
-```
-    DAT:    http://52.232.119.164:8081/v1/faucet/dat/[wallet address]
-```
-*/
-
-
-
-### Create Identity
-
-*creates an identity object with public/private key and public address*
+### HTML Examples
 
 ```
-var identity = datum.createIdentity();
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Backbone App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <script type="text/javascript" src="datum.js"></script>
+    <script type="text/javascript">
+        const Datum = require('/lib/datum.js');
+
+
+        var identDeveloper = Datum.createIdentity();
+
+        function checkBalances() {
+            document.getElementById("balanceResult").innerHTML = "loading...";
+            document.getElementById("depositResult").innerHTML = "loading...";
+
+            var s = document.getElementById('balanceAddress');
+
+            Datum.getBalance(s.value).then(balance => {
+                document.getElementById("balanceResult").innerHTML = balance;
+                return Datum.getDepositBalance(s.value);
+            }).then(depositBalance => {
+                document.getElementById("depositResult").innerHTML = depositBalance;
+            }).catch(error => {
+                alert(error);
+            })
+        }
+
+        function onDeposit() {
+            var privateKey = document.getElementById('privateKey').value;
+            if (privateKey == "") {
+                alert('privateKey not set!');
+                return;
+            }
+
+            var datum = new Datum();
+
+            datum.initialize({
+                privateKey: privateKey
+            });
+
+            document.getElementById("depositTransactionResult").innerHTML = 'init deposit...';
+            var amount = document.getElementById('amountToDeposit').value;
+
+            datum.deposit(amount).on('transaction', function (txHash) {
+                document.getElementById("depositTransactionResult").innerHTML = 'hash broadcasted to network: ' + txHash;
+            }).then(result => {
+                document.getElementById("depositTransactionResult").innerHTML = 'deposit done, recheck balances...';
+            }).catch(error => {
+                alert(error);
+            })
+        }
+
+
+        function onWithdrawal() {
+            var privateKey = document.getElementById('privateKey').value;
+            if (privateKey == "") {
+                alert('privateKey not set!');
+                return;
+            }
+
+            var datum = new Datum();
+
+            datum.initialize({
+                privateKey: privateKey
+            });
+
+            document.getElementById("withdrawalTransactionResult").innerHTML = 'init withdrawal...';
+            var amount = document.getElementById('amountToWithdrawal').value;
+
+            datum.deposit(amount).on('transaction', function (txHash) {
+                document.getElementById("withdrawalTransactionResult").innerHTML = 'hash broadcasted to network: ' + txHash;
+            }).then(result => {
+                document.getElementById("withdrawalTransactionResult").innerHTML = 'withdrawal done, recheck balances...';
+            }).catch(error => {
+                alert(error);
+            })
+        }
+
+        function onSetStorage() {
+            var privateKey = document.getElementById('privateKey').value;
+            if (privateKey == "") {
+                alert('privateKey not set!');
+                return;
+            }
+
+            var datum = new Datum();
+
+            datum.initialize({
+                privateKey: privateKey,
+                developerPublicKey: identDeveloper.publicKey
+
+            });
+
+            document.getElementById("storeTransactionResult").innerHTML = 'init set data...';
+            var data = document.getElementById('dataToStore').value;
+
+            datum.set(data).on('transaction', function (txHash) {
+                document.getElementById("storeTransactionResult").innerHTML = 'hash broadcasted to network: ' + txHash;
+            }).then(result => {
+                document.getElementById("storeTransactionResult").innerHTML = 'set data done: ' + result;
+            }).catch(error => {
+                alert(error);
+            })
+        }
+
+        function onGetStorage() {
+            var privateKey = document.getElementById('privateKey').value;
+            if (privateKey == "") {
+                alert('privateKey not set!');
+                return;
+            }
+
+            var datum = new Datum();
+
+            datum.initialize({
+                privateKey: privateKey,
+                developerPublicKey: identDeveloper.publicKey
+            });
+
+            document.getElementById("loadTransactionResult").innerHTML = 'init set data...';
+            var data = document.getElementById('dataToRetrieve').value;
+
+            datum.get(data).then(result => {
+                document.getElementById("loadTransactionResult").innerHTML = 'get data done, result: ' + result;
+            }).catch(error => {
+                alert(error);
+            })
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Datum SDK Samples</h3>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Check balances</h4>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <input type="text" id="balanceAddress" class="form-control" placeholder="address to check" value="0xE802B81079493bd66EaF0120a50D04A58F182a41">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="checkBalances();">Check</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-4 col-xs-12">
+                <label class="control-label">
+                    Network Balance:
+                </label>
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                <span id="balanceResult">-</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-xs-12">
+                <label class="control-label">
+                    Storage Deposit Balance:
+                </label>
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                <span id="depositResult">-</span>
+            </div>
+        </div>
+        <hr>
+        <h3>Transactions</h3>
+        <div class="row">
+            <div class="col-xs-12">
+                <input type="text" id="privateKey" class="form-control" placeholder="privateKey" value="0xa079d06586a812f4e51700b6f9293159ef791da86c505b5a81ee25c122a663ef">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Deposit</h4>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <input type="text" id="amountToDeposit" class="form-control" placeholder="amount to deposit in DAT">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onDeposit();">Deposit</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12" id="depositTransactionResult">
+
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Withdrawal</h4>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <input type="text" id="amountToWithdrawal" class="form-control" placeholder="amount to withdrawal in DAT">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onWithdrawal();">Withdrawal</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12" id="withdrawalTransactionResult">
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Set/Store Data</h4>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <input type="text" id="dataToStore" class="form-control" placeholder="any data to store">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onSetStorage();">Set</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12" id="storeTransactionResult">
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Get data by hash</h4>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <input type="text" id="dataToRetrieve" class="form-control" placeholder="hash of data item">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onGetStorage();">Get</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12" id="loadTransactionResult">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
 ```
 
-Result
-```
-{ address: '0x18B13d1D60ed35C6A700A939AA17c1AdB4002517',
-  privateKey: '0x369b224ff734ee7863086f84be9cb5b80322b49b3935effa9fd4ba6f334e8e93',
-  publicKey: '3a1b15d7f542e4ebe65be15af1b6024938a17d31e57867f919806cce7137c9147a30744c307b8ac8541b050547bb5a9dd58deec918fcd3cf517b42f0fc0ffbeb' }
-```
 
-
-### Transfer to Datum Blockchain
-
-*transfer DAT (in wei) from Ethereum to Datum Blockchain*
-
-```
-datum.transfer(10000000000000000000)
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-})
-```
-
-
-
-### Calculate Storage Costs, e.g. 1MB for 365 days
-
-*calculcate the storage costs for given size and duration*
-
-```
-datum.getStorageCosts(1024 * 1024, 365)
-.then(costs => {
-    console.log(costs);
-    console.log(p.toDAT(costs));
-})
-.catch(error => {
-    console.log('error');
-    console.log(error);
-})
-```
-
-### Prepare data for storage node
-
-*random secret will be generated and the data will be encrypted with publicKey from owner*
-
-```
-var data = datum.prepareData('123');
-```
-
-
-### Deposit some DAT tokens to storage contract
-
-*transfer 10 DAT from your wallet in Datum Blockchain to the storage smart contract*
-
-```
-datum.deposit(10)
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-})
-```
-
-
-
-### Full Flow
-
-*represent a full flow from deposit to storage contract init and upload some data and retrieve the data back*
-
-```
-var data = datum.prepareData('Some sample data');
-
-datum.deposit(10)
-.then(result => {
-    console.log('deposit done');
-    return datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData");
-})
-.then(result => {
-    console.log('upload done');
-    return datum.get(data.id);
-})
-.then(result => {
-    console.log('download done');
-    console.log(result);
-})
-.catch(error => {
-    console.log('error');
-    console.log(error);
-})
-```
-
-### Init Storage to Datum Blockchain
-
-*init storage in smart contract*
-
-```
-datum.initStorage(data, "Profiles", "sample_category",1,1,360, "metaData")
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log('error');
-    console.log(error);
-})
-```
-
-
-### Upload / Set the data to storage node and init in same turn
-
-*init storage in smart contract and upload data in same turn*
-
-```
-datum.setAndInit(data, "Profiles", "category",1,1,360, "metaData")
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
-
-### Upload / Set the data to storage node (initStorage already done)
-
-*set/upload data to a storage node*
-
-```
-datum.set(data)
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
-
-### Upload / Set the data to storage node with key assigned
-
-*set/upload data to a storage node with a keyname*
-
-```
-datum.setWithKey(data, "key_name")
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
-
-### Download / Get the data to storage node
-
-*get/download data from storage node*
-
-```
-datum.get(data.id)
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
-
-### Download / Get the data from storage node by keyname
-
-*get/download data from storage node with key name*
-
-```
-datum.getWithKey("key_name")
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
-
-### Remove the data to storage node
-
-*remove data from storage node*
-
-```
-datum.remove(data.id)
-.then(result => {
-    console.log(result);
-})
-.catch(error => {
-    console.log(error);
-});
-```
-
-
-### Set private key
-
-*set the private/developer key after datum instace already exists*
-
-```
-datum.setDeveloperKey(data.id)
-```
-
-
-### Events
-
-*you can catch several events for all blockchain related methods*
-
-
-```
-
-Getting the raw transaction before signing
-
-datum.events().on('beforeSignTransaction', (tx) => {
-    console.log(tx);
-});
-
-Getting the signed transaction
-
-datum.events().on('afterSignTransaction', (txSigned) => {
-    console.log(txSigned);
-});
-
-Getting the transaction hash after the broadcast to network
-
-datum.events().on('transactionHash', (hash) => {
-    console.log(hash);
-});
-
-Getting the block information where the transaction was mined in
-
-datum.events().on('receipt', (receipt) => {
-    console.log(receipt);
-});
-
- ```
