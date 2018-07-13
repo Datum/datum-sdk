@@ -3,9 +3,21 @@
 
 ### Install
 
-npm install datum-sdk --save
+npm install builds also the bundled and minified version "datum.js" , "datum.min.js" in /dist folder to include in HTML
 
-*npm install builds also the bundled and minified version "datum.js" , "datum.min.js" in /dist folder to include in HTML*
+```
+npm install datum-sdk --save
+```
+
+
+### Tests
+
+Run tests based Mocha test framework
+
+```
+mocha ./test
+```
+
 
 ## Documentations
 

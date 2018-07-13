@@ -1,3 +1,5 @@
-var Datum = require('./lib/datum');
+module.exports = {
+    Datum : require('./lib/datum'),
+    DatumIdentity : require('./lib/datumIdentity')
+}
 
-module.exports = Datum;
