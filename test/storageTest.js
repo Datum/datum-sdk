@@ -2,7 +2,6 @@ var chai = require('chai');
 //use default BigNumber
 chai.use(require('chai-bignumber')());
 var assert = chai.assert;
-var request = require('async-request')
 const Web3 = require('web3');
 
 
@@ -26,7 +25,7 @@ describe('storage tests', function () {
     before(async () => {
 
         /*
-        //create identiy 
+        //create identiy
         identity = Datum.createIdentity();
 
         //Faucet some dat
@@ -91,7 +90,7 @@ describe('storage tests', function () {
 
             //get balances
             let balanceDeposit =  parseFloat(await Datum.getDepositBalance(identity.address,true));
-            let balance = parseFloat(await Datum.getBalance(identity.address, true)); 
+            let balance = parseFloat(await Datum.getBalance(identity.address, true));
 
             assert.isBelow(balance, actualBalance, 'balance should be lower');
             assert.isAtLeast(balanceDeposit, 2, 'deposit balance should at least 1');
@@ -121,9 +120,9 @@ describe('storage tests', function () {
     describe('item CRUD actions', function () {
 
         var textDataToStore = "ahdskjlhajkshdjklhajksdhjkahjdslkdhhasd";
-        var objectDataToStore = { 
-            id: "test", 
-            name: "Name" 
+        var objectDataToStore = {
+            id: "test",
+            name: "Name"
         };
 
 
@@ -191,7 +190,7 @@ describe('storage tests', function () {
             assert.equal(originalContent , JSON.stringify(objectDataToStore), "downloaded content must match passed content");
         });
         */
-        
+
 
         /*
         it('delete item (object)', async function () {
