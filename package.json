@@ -10,8 +10,6 @@
   "author": "florian@datum.org",
   "license": "see LICENSE",
   "dependencies": {
-    "eth-crypto": "^1.2.1",
-    "eth-ecies": "^1.0.3",
     "eth-lightwallet": "^3.0.1",
     "ethereumjs-tx": "^1.3.4",
     "ethereumjs-util": "^5.2.0",
