@@ -8,7 +8,7 @@
     "prepublish": "browserify -r ./lib/datum.js > ./dist/datum.js && uglifyjs ./dist/datum.js -cm -o ./dist/datum.min.js"
   },
   "author": "florian@datum.org",
-  "license": "see LICENSE",
+  "license": "LGPL-3.0-or-later",
   "dependencies": {
     "eth-lightwallet": "^3.0.1",
     "ethereumjs-tx": "^1.3.4",
