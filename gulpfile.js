@@ -9,7 +9,6 @@ var sourcemaps  = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 var runSequence = require('run-sequence');
 
-var BABEL_POLYFILL = './node_modules/babel-polyfill/browser.js';
 var BABEL_CONFIG={
     compact:false,
     minified:false,
