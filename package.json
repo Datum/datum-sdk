@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "browserify -r ./lib/datum.js > ./dist/datum.js && uglifyjs ./dist/datum.js -cm -o ./dist/datum.min.js"
+    "prepublish": "gulp"
   },
   "author": "florian@datum.org",
   "license": "LGPL-3.0-or-later",
