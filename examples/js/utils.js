@@ -6,18 +6,44 @@ var PASSWORD ="password";
  * Key will be identity Address.
  */
 var DATA_KEY;
-Datum.createIdentity(PASSWORD).then((id) => {
-    identDeveloper =id;
-    DATA_KEY = JSON.parse(identDeveloper.keystore).addresses[0];
-    datum = new Datum();
-    datum.initialize({identity:id.keystore});
-    datum.identity.storePassword(PASSWORD);
-    //Update Address element
-    getElement('balanceAddress').value = datum.identity.address;
-  })
-  .catch((err) => {
-    alert(err);
-  });
+
+createDatumObj(PASSWORD).then(obj=>{
+  datum =obj;
+  // fetch('https://faucet.megatron.datum.org/v1/faucet/dat/'+datum.identity.address,{
+  //   mode:"cors"
+  // })
+  // .then((res)=>{
+  //   console.log(res);
+  // })
+  // .catch((err)=>{
+  //   console.error(err);
+  // });
+  getElement('balanceAddress').value = datum.identity.address
+});
+
+async function createDatumObj(password,accounts=0){
+  let tmpDatObj = new Datum();
+  let id = await Datum.createIdentity(password,accounts);
+  tmpDatObj.initialize({identity:id.keystore});
+  tmpDatObj.identity.storePassword(password);
+  let pubKeyPromises = await tmpDatObj.identity.addresses.map((v,i)=>tmpDatObj.identity.getPublicKey(i));
+  let defaultPubKeys = await Promise.all(pubKeyPromises);
+  tmpDatObj.identity.defaultPublicKeys = defaultPubKeys;
+  return tmpDatObj;
+}
+
+// Datum.createIdentity(PASSWORD).then((id) => {
+//     identDeveloper =id;
+//     DATA_KEY = JSON.parse(identDeveloper.keystore).addresses[0];
+//     datum = new Datum();
+//     datum.initialize({identity:id.keystore});
+//     datum.identity.storePassword(PASSWORD);
+//     //Update Address element
+//     getElement('balanceAddress').value = datum.identity.address;
+//   })
+//   .catch((err) => {
+//     alert(err);
+//   });
 
 /**
  * Get element by ID
@@ -82,16 +108,22 @@ function onSetStorage() {
   updateInnerHTML('storeTransactionResult', 'init set data...');
   var data = getElement('dataToStore').value;
 
-  datum.set(DATA_KEY,data).on('transaction', function(txHash) {
-    updateInnerHTML('storeTransactionResult',
-      'hash broadcasted to network: ' + txHash);
-  }).then(result => {
-    updateInnerHTML('storeTransactionResult', 'set data done: ' +
-      result);
-      checkBalances();
-  }).catch(error => {
-    alert(error);
-  })
+  datum.set(data)
+  .then((res)=>{
+    console.log(res);
+  }).catch((err)=>{
+    console.error(err);
+  });
+  // .on('transaction', function(txHash) {
+  //   updateInnerHTML('storeTransactionResult',
+  //     'hash broadcasted to network: ' + txHash);
+  // }).then(result => {
+  //   updateInnerHTML('storeTransactionResult', 'set data done: ' +
+  //     result);
+  //     checkBalances();
+  // }).catch(error => {
+  //   alert(error);
+  // })
 }
 
 
