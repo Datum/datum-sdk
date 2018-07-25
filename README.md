@@ -32,7 +32,7 @@ const password = 'Hollow Morpheus Mauled...';
 Datum.createIdentity(
   password
 ).then((res) => {
-  console.log(res) //{seed: "...", keystore: "{"encSeed":{"encStr":"eddG2...","hdIndex":1,"version":3}"}
+  console.log(res) // {seed:"...", keystore:"{"encSeed":{"encStr":"eddG2...","hdIndex":1,"version":3}"}
 }).catch((e) => {
   console.error(e)
 });
