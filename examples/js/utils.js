@@ -9,17 +9,32 @@ var DATA_KEY;
 
 createDatumObj(PASSWORD).then(obj=>{
   datum =obj;
-  // fetch('https://faucet.megatron.datum.org/v1/faucet/dat/'+datum.identity.address,{
-  //   mode:"cors"
-  // })
-  // .then((res)=>{
-  //   console.log(res);
-  // })
-  // .catch((err)=>{
-  //   console.error(err);
-  // });
+  fetch('https://faucet.megatron.datum.org/v1/faucet/dat/'+datum.identity.address,{
+    mode:"cors"
+  })
+  .then((res)=>{
+    console.log(res);
+    updateBalanceStatus();
+  })
+  .catch((err)=>{
+    console.error(err);
+  });
   getElement('balanceAddress').value = datum.identity.address
 });
+
+function haveBalance(){
+  let currBalance = getElement('balanceResult').innerHTML;
+  return typeof(currBalance)!=='undefined'&& !isNaN(currBalance) && parseInt(currBalance)>0;
+}
+
+function updateBalanceStatus(){
+  if(!haveBalance()){
+    checkBalances();
+    setTimeout(
+      updateBalanceStatus
+    ,1000);
+  }
+}
 
 async function createDatumObj(password,accounts=0){
   let tmpDatObj = new Datum();
@@ -32,18 +47,7 @@ async function createDatumObj(password,accounts=0){
   return tmpDatObj;
 }
 
-// Datum.createIdentity(PASSWORD).then((id) => {
-//     identDeveloper =id;
-//     DATA_KEY = JSON.parse(identDeveloper.keystore).addresses[0];
-//     datum = new Datum();
-//     datum.initialize({identity:id.keystore});
-//     datum.identity.storePassword(PASSWORD);
-//     //Update Address element
-//     getElement('balanceAddress').value = datum.identity.address;
-//   })
-//   .catch((err) => {
-//     alert(err);
-//   });
+
 
 /**
  * Get element by ID
@@ -90,18 +94,18 @@ function onDeposit() {
 
 
 function onWithdrawal() {
-  updateInnerHTML('withdrawalTransactionResult', 'init withdrawal...');
+  updateInnerHTML('withdrawalTransactionResult', 'Processing withdrawal request...');
   var amount = getElement('amountToWithdrawal').value;
-  datum.deposit(amount).on('transaction', function(txHash) {
-    updateInnerHTML(withdrawalTransactionResult,
-      'hash broadcasted to network: ' + txHash);
-  }).then(result => {
-    updateInnerHTML(withdrawalTransactionResult,
-      'withdrawal done');
-      checkBalances();
-  }).catch(error => {
-    alert(error);
-  })
+  datum.withdrawal(amount).then(txHash=>{
+    updateInnerHTML('withdrawalTransactionResult',
+      'Transaction is successful');
+    checkBalances();
+  }).catch(err=>{
+    updateInnerHTML('withdrawalTransactionResult',
+      'Withdrawal failed!');
+     console.error(err);
+     checkBalances();
+  });
 }
 
 function onSetStorage() {
@@ -109,47 +113,26 @@ function onSetStorage() {
   var data = getElement('dataToStore').value;
 
   datum.set(data)
-  .then((res)=>{
-    console.log(res);
+  .then((id)=>{
+    updateInnerHTML('storeTransactionResult',
+        'hash broadcasted to network: ' + id);
+    console.log(id);
   }).catch((err)=>{
+    updateInnerHTML('storeTransactionResult', 'Transaction failed!.');
     console.error(err);
   });
-  // .on('transaction', function(txHash) {
-  //   updateInnerHTML('storeTransactionResult',
-  //     'hash broadcasted to network: ' + txHash);
-  // }).then(result => {
-  //   updateInnerHTML('storeTransactionResult', 'set data done: ' +
-  //     result);
-  //     checkBalances();
-  // }).catch(error => {
-  //   alert(error);
-  // })
 }
 
 
 function onGetStorage() {
   updateInnerHTML('loadTransactionResult', 'init set data...');
-  var data = getElement('dataToRetrieve').value;
-  datum.get(data).then(result => {
+  var id = getElement('dataToRetrieve').value;
+  datum.get(id).then(result => {
     updateInnerHTML('loadTransactionResult',
       'get data done, result: ' + result);
       checkBalances();
   }).catch(error => {
+    updateInnerHTML('loadTransactionResult', 'init set data...');
     alert(error);
   })
 }
-
-/**
- *   var privateKey = getElement('privateKey').value;
-   if (privateKey == "") {
-     alert('privateKey not set!');
-     return;
-   }
-
-   var datum = new Datum();
-
-   datum.initialize({
-     privateKey: privateKey,
-     developerPublicKey: identDeveloper.publicKey
-   });
- */
