@@ -1,15 +1,53 @@
 var identDeveloper;
 var datum;
-Datum.createIdentity("password").then((id) => {
-    console.log('Generated ID:', id);
-    identDeveloper = id;
-    datum = new Datum({
-      identity: JSON.stringify(id)
-    });
+var PASSWORD ="password";
+/**
+ * This is used as a key for storing data
+ * Key will be identity Address.
+ */
+var DATA_KEY;
+
+createDatumObj(PASSWORD).then(obj=>{
+  datum =obj;
+  fetch('https://faucet.megatron.datum.org/v1/faucet/dat/'+datum.identity.address,{
+    mode:"cors"
   })
-  .catch((err) => {
-    alert(err);
+  .then((res)=>{
+    console.log(res);
+    updateBalanceStatus();
+  })
+  .catch((err)=>{
+    console.error(err);
   });
+  getElement('balanceAddress').value = datum.identity.address
+});
+
+function haveBalance(){
+  let currBalance = getElement('balanceResult').innerHTML;
+  return typeof(currBalance)!=='undefined'&& !isNaN(currBalance) && parseInt(currBalance)>0;
+}
+
+function updateBalanceStatus(){
+  if(!haveBalance()){
+    checkBalances();
+    setTimeout(
+      updateBalanceStatus
+    ,1000);
+  }
+}
+
+async function createDatumObj(password,accounts=0){
+  let tmpDatObj = new Datum();
+  let id = await Datum.createIdentity(password,accounts);
+  tmpDatObj.initialize({identity:id.keystore});
+  tmpDatObj.identity.storePassword(password);
+  let pubKeyPromises = await tmpDatObj.identity.addresses.map((v,i)=>tmpDatObj.identity.getPublicKey(i));
+  let defaultPubKeys = await Promise.all(pubKeyPromises);
+  tmpDatObj.identity.defaultPublicKeys = defaultPubKeys;
+  return tmpDatObj;
+}
+
+
 
 /**
  * Get element by ID
@@ -24,12 +62,11 @@ function updateInnerHTML(elementId, msg) {
   getElement(elementId).innerHTML = msg;
 }
 
+
 function checkBalances() {
   updateInnerHTML('balanceResult', 'loading...');
   updateInnerHTML('depositResult', 'loading...');
-
   var s = getElement('balanceAddress');
-
   Datum.getBalance(s.value).then(balance => {
     updateInnerHTML("balanceResult", balance);
     return Datum.getDepositBalance(s.value);
@@ -41,27 +78,15 @@ function checkBalances() {
 }
 
 function onDeposit() {
-  var privateKey = getElement('privateKey').value;
-  if (privateKey == "") {
-    alert('privateKey not set!');
-    return;
-  }
-
-  var datum = new Datum();
-
-  datum.initialize({
-    identity: JSON.stringify()
-  });
   updateInnerHTML('depositTransactionResult', 'init deposit...');
-
   var amount = getElement('amountToDeposit').value;
-
   datum.deposit(amount).on('transaction', function(txHash) {
     updateInnerHTML("depositTransactionResult",
       'hash broadcasted to network: ' + txHash)
   }).then(result => {
     updateInnerHTML("depositTransactionResult",
-      'deposit done, recheck balances...');
+      'deposit done');
+      checkBalances();
   }).catch(error => {
     alert(error);
   })
@@ -69,78 +94,46 @@ function onDeposit() {
 
 
 function onWithdrawal() {
-  var privateKey = getElement('privateKey').value;
-  if (privateKey == "") {
-    alert('privateKey not set!');
-    return;
-  }
-
-  var datum = new Datum();
-
-  datum.initialize({
-    privateKey: privateKey
-  });
-  updateInnerHTML('withdrawalTransactionResult', 'init withdrawal...');
+  updateInnerHTML('withdrawalTransactionResult', 'Processing withdrawal request...');
   var amount = getElement('amountToWithdrawal').value;
-
-  datum.deposit(amount).on('transaction', function(txHash) {
-    updateInnerHTML(withdrawalTransactionResult,
-      'hash broadcasted to network: ' + txHash);
-  }).then(result => {
-    updateInnerHTML(withdrawalTransactionResult,
-      'withdrawal done, recheck balances...');
-  }).catch(error => {
-    alert(error);
-  })
+  datum.withdrawal(amount).then(txHash=>{
+    updateInnerHTML('withdrawalTransactionResult',
+      'Transaction is successful');
+    checkBalances();
+    console.log(txHash);
+  }).catch(err=>{
+    updateInnerHTML('withdrawalTransactionResult',
+      'Withdrawal failed!');
+     console.error(err);
+     checkBalances();
+  });
 }
 
 function onSetStorage() {
-  var privateKey = getElement('privateKey').value;
-  if (privateKey == "") {
-    alert('privateKey not set!');
-    return;
-  }
-
-  var datum = new Datum();
-
-  datum.initialize({
-    privateKey: privateKey,
-    developerPublicKey: identDeveloper.publicKey
-
-  });
   updateInnerHTML('storeTransactionResult', 'init set data...');
   var data = getElement('dataToStore').value;
 
-  datum.set(data).on('transaction', function(txHash) {
+  datum.set(data)
+  .then((id)=>{
     updateInnerHTML('storeTransactionResult',
-      'hash broadcasted to network: ' + txHash);
-  }).then(result => {
-    updateInnerHTML('storeTransactionResult', 'set data done: ' +
-      result);
-  }).catch(error => {
-    alert(error);
-  })
+        'hash broadcasted to network: ' + id);
+    console.log(id);
+  }).catch((err)=>{
+    updateInnerHTML('storeTransactionResult', 'Transaction failed!.');
+    console.error(err);
+  });
 }
 
+
 function onGetStorage() {
-  var privateKey = getElement('privateKey').value;
-  if (privateKey == "") {
-    alert('privateKey not set!');
-    return;
-  }
-
-  var datum = new Datum();
-
-  datum.initialize({
-    privateKey: privateKey,
-    developerPublicKey: identDeveloper.publicKey
-  });
   updateInnerHTML('loadTransactionResult', 'init set data...');
-  var data = getElement('dataToRetrieve').value;
-  datum.get(data).then(result => {
+  var id = getElement('dataToRetrieve').value;
+  datum.get(id).then(result => {
     updateInnerHTML('loadTransactionResult',
       'get data done, result: ' + result);
+      checkBalances();
   }).catch(error => {
+    updateInnerHTML('loadTransactionResult', 'init set data...');
     alert(error);
   })
 }
