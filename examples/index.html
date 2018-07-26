@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Backbone App</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script type="text/javascript" src="../dist/datum.js" charset="utf-8"></script>
+  <script src="./js/utils.js" charset="utf-8"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <h3>Datum SDK Samples</h3>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>Check balances</h4>
+      </div>
+
+      <div class="col-xs-12">
+        <div class="input-group">
+          <input type="text" id="balanceAddress" class="form-control" placeholder="address to check">
+          <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="checkBalances();">Check</button>
+                    </span>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-4 col-xs-12">
+        <label class="control-label">
+                    Network Balance:
+                </label>
+      </div>
+      <div class="col-sm-8 col-xs-12">
+        <span id="balanceResult">-</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4 col-xs-12">
+        <label class="control-label">
+                    Storage Deposit Balance:
+                </label>
+      </div>
+      <div class="col-sm-8 col-xs-12">
+        <span id="depositResult">-</span>
+      </div>
+    </div>
+    <hr>
+    <h3>Transactions</h3>
+    <!-- <div class="row">
+      <div class="col-xs-12">
+        <input type="text" id="privateKey" class="form-control" placeholder="privateKey" value="">
+      </div>
+    </div>
+    <br> -->
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>Deposit</h4>
+      </div>
+
+      <div class="col-xs-12">
+        <div class="input-group">
+          <input type="text" id="amountToDeposit" class="form-control" placeholder="amount to deposit in DAT">
+          <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onDeposit();">Deposit</button>
+                    </span>
+        </div>
+      </div>
+      <div class="col-xs-12" id="depositTransactionResult">
+
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>Withdrawal</h4>
+      </div>
+
+      <div class="col-xs-12">
+        <div class="input-group">
+          <input type="text" id="amountToWithdrawal" class="form-control" placeholder="amount to withdrawal in DAT">
+          <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onWithdrawal();">Withdrawal</button>
+                    </span>
+        </div>
+      </div>
+      <div class="col-xs-12" id="withdrawalTransactionResult">
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>Set/Store Data</h4>
+      </div>
+
+      <div class="col-xs-12">
+        <div class="input-group">
+          <input type="text" id="dataToStore" class="form-control" placeholder="any data to store">
+          <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onSetStorage();">Set</button>
+                    </span>
+        </div>
+      </div>
+      <div class="col-xs-12" id="storeTransactionResult">
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>Get data by hash</h4>
+      </div>
+
+      <div class="col-xs-12">
+        <div class="input-group">
+          <input type="text" id="dataToRetrieve" class="form-control" placeholder="hash of data item">
+          <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onGetStorage();">Get</button>
+                    </span>
+        </div>
+      </div>
+      <div class="col-xs-12" id="loadTransactionResult">
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
