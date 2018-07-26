@@ -100,6 +100,7 @@ function onWithdrawal() {
     updateInnerHTML('withdrawalTransactionResult',
       'Transaction is successful');
     checkBalances();
+    console.log(txHash);
   }).catch(err=>{
     updateInnerHTML('withdrawalTransactionResult',
       'Withdrawal failed!');
