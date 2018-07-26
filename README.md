@@ -56,4 +56,4 @@ mocha ./test
 
 ## Examples
 
-Check our examples folder.
+[Check our examples folder.](docs/example.md)
