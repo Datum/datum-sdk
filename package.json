@@ -10,6 +10,8 @@
   "author": "florian@datum.org",
   "license": "LGPL-3.0-or-later",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "bignumber.js": "^7.2.1",
     "eth-lightwallet": "^3.0.1",
     "ethereumjs-tx": "^1.3.4",
     "ethereumjs-util": "^5.2.0",
@@ -24,9 +26,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "bignumber.js": "^7.2.1",
     "browserify": "^16.2.2",
     "chai": "^4.1.2",
     "chai-bignumber": "^2.0.2",
@@ -45,9 +45,9 @@
     "index.js",
     "browser.js"
   ],
-  "repository" :
-  { "type" : "git"
-  , "url" : "https://github.com/Datum/datum-sdk.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Datum/datum-sdk.git"
   },
   "homepage": "https://github.com/Datum/datum-sdk#readme"
 }
