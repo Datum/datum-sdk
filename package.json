@@ -1,6 +1,6 @@
 {
   "name": "datum-sdk",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "javascript API for datum network",
   "main": "index.js",
   "scripts": {
@@ -41,13 +41,12 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
-  "files": [
-    "index.js",
-    "browser.js"
-  ],
-  "repository" :
-  { "type" : "git"
-  , "url" : "https://github.com/Datum/datum-sdk.git"
+  "directories": {
+    "lib": "./lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Datum/datum-sdk.git"
   },
   "homepage": "https://github.com/Datum/datum-sdk#readme"
 }
