@@ -41,9 +41,9 @@ async function createDatumObj(password,accounts=0){
   let id = await Datum.createIdentity(password,accounts);
   tmpDatObj.initialize({identity:id.keystore});
   tmpDatObj.identity.storePassword(password);
-  let pubKeyPromises = await tmpDatObj.identity.addresses.map((v,i)=>tmpDatObj.identity.getPublicKey(i));
-  let defaultPubKeys = await Promise.all(pubKeyPromises);
-  tmpDatObj.identity.defaultPublicKeys = defaultPubKeys;
+  // let pubKeyPromises = await tmpDatObj.identity.addresses.map((v,i)=>tmpDatObj.identity.getPublicKey(i));
+  // let defaultPubKeys = await Promise.all(pubKeyPromises);
+  // tmpDatObj.identity.defaultPublicKeys = defaultPubKeys;
   return tmpDatObj;
 }
 
