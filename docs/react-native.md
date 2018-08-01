@@ -1,21 +1,34 @@
 ## React-Native Setup
 
 These steps are only applicable if you are using react-native build tool.
-We are currently only supporting the official react-native build tool, as for expo we are still looking into the best practices to help SDK developers build with it.
+We are currently **only supporting the official react-native build tool**
 
-##### Steps to include datum-sdk in your react-native project
-1- npm install --save datum-sdk && npm i
+**As of now, we are not supporting Expo**
 
-2- Follow instructions in https://www.npmjs.com/package/react-native-crypto
+#### Getting Started
+1) Run the following code:
 
-- If you faced the following error
+```bash
+npm i --save datum-sdk  
 ```
+
+---------------------------
+
+2) Follow instructions in https://www.npmjs.com/package/react-native-crypto
+
+_If you faced the following error:_
+```bash
 > A problem occurred configuring project ':react-native-randombytes'.
      > The SDK Build Tools revision (23.0.1) is too low for project ':react-native-randombytes'.
       Minimum required is 25.0.0
 ```
-- You will need to add the following in your project_root/android/gradle.build file
-```
+ You will need to add the following in your project_root/android/build.gradle file after dependencies
+```gradle
+{
+
+dependencies{
+  ...
+}  
 subprojects {
   project.configurations.all {
       afterEvaluate {project ->
@@ -33,10 +46,14 @@ subprojects {
         }
      }
   }}
+}
 ```
 
-3- Create global.js file on your project_root that has the following
-```
+---------------------------
+
+3) Create global.js file on your project_root that has the following
+```javascript
+/* eslint disable */
 global.Buffer = require('buffer').Buffer;
 global.process = require('process');
 
@@ -48,15 +65,19 @@ if (typeof btoa === 'undefined') {
 }
 ```
 
-4- Include the following in your project_root/index.js [ or your entry point ]
-```
+---------------------------
+
+4) Include the following in your project_root/index.js [ or your entry point ]
+```javascript
+/* eslint disable */
 import './global';
 import './shim';
-import crypto from "crypto";
+import crypto from ‘crypto’;
 ```
 
-5- You can start your project
-```
-For Android: react-native run-android
-For IOS : react-native run-ios
-```
+---------------------------
+
+5) You can start your project
+> For Android: react-native run-android
+
+> For IOS : react-native run-ios
