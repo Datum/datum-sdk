@@ -1,6 +1,6 @@
 {
   "name": "datum-sdk",
-  "version": "0.1.3",
+  "version": "0.1.7",
   "description": "javascript API for datum network",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,9 @@
   "author": "florian@datum.org",
   "license": "LGPL-3.0-or-later",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "bignumber.js": "^7.2.1",
     "eth-lightwallet": "^3.0.1",
     "ethereumjs-tx": "^1.3.4",
     "ethereumjs-util": "^5.2.0",
@@ -24,9 +27,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "bignumber.js": "^7.2.1",
     "browserify": "^16.2.2",
     "chai": "^4.1.2",
     "chai-bignumber": "^2.0.2",
@@ -41,8 +42,12 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
-  "files": [
-    "index.js",
-    "browser.js"
-  ]
+  "directories": {
+    "lib": "./lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Datum/datum-sdk.git"
+  },
+  "homepage": "https://github.com/Datum/datum-sdk#readme"
 }
