@@ -56,17 +56,3 @@ Run tests based Mocha test framework
 ```
 mocha ./test
 ```
-##### Testing SDK before publishing
-It is important to test SDK locally before we publish. The idea is to test the SDK as if we are the SDK users and we are using it through *npm install.*
-
-Though there are plenty of ways to do that, listed below are the steps on how to achieve that using a very simple approach.
-```
-1. Delete node_modules from sdk project.
-2. Create a folder outside of the sdk project folder, call it test_sdk (name is up to you)
-3. cd test_sdk
-4. npm init
-5. npm install --save ../datum-sdk/index.js --production
-6. touch index.js
-7. inside your index.js test the functionalities you are interested in.
-```
-The purpose of this test it to check how the SDK will behave from SDK user perspective, ***Testing SDK functionalities should be done via unit and integration testing.***
