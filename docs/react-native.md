@@ -6,6 +6,7 @@ We are currently **only supporting the official react-native build tool**
 **As of now, we are not supporting Expo**
 
 #### Getting Started
+**_This setup is is done with Node.js  Version: 10.8.0, and npm  Version: 6.2.0_**
 1) Run the following code:
 
 ```bash
@@ -63,6 +64,9 @@ if (typeof btoa === 'undefined') {
     return new Buffer(str, 'binary').toString('base64');
   };
 }
+if(typeof self ==='undefined'){
+  global.self = global;
+}
 ```
 
 ---------------------------
@@ -72,7 +76,6 @@ if (typeof btoa === 'undefined') {
 /* eslint disable */
 import './global';
 import './shim';
-import crypto from ‘crypto’;
 ```
 
 ---------------------------
@@ -81,3 +84,55 @@ import crypto from ‘crypto’;
 > For Android: react-native run-android
 
 > For IOS : react-native run-ios
+
+---------------------------
+###Example
+
+
+#####index.js
+_Assuming that index.js is your project entry point_
+```javascript
+/** @format */
+import './global';
+import './shim';
+import {AppRegistry} from 'react-native';
+import App from './App';
+import {name as appName} from './app.json';
+
+AppRegistry.registerComponent(appName, () => App);
+
+```
+
+
+#####App.js
+_Assuming that App.js is where you have your root element_
+```javascript
+import React, {Component} from 'react';
+import {View,Text} from 'react-native';
+
+
+class App extends Component{
+  constructor(props){
+    super(props);
+    this.Datum = require('datum-sdk');
+    this.state={};
+  }
+  componentDidMount(){
+    this.Datum.createIdentity("password")
+    .then(id=>this.setState({key:id.keystore}))
+    .catch(err=>this.setState({error:JSON.stringify(err)}));
+  }
+  render() {
+    return (
+      <View>
+        <Text>Welcome to Datum</Text>
+        <Text>{this.state.key}</Text>
+        <Text>{this.state.error}</Text>
+      </View>
+
+    );
+  }
+}
+
+export default App;
+```
