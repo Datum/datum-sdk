@@ -86,11 +86,14 @@ import './shim';
 > For IOS : react-native run-ios
 
 ---------------------------
-###Example
+
+### Example
 
 
-#####index.js
+##### index.js
+
 _Assuming that index.js is your project entry point_
+
 ```javascript
 /** @format */
 import './global';
@@ -104,8 +107,10 @@ AppRegistry.registerComponent(appName, () => App);
 ```
 
 
-#####App.js
+##### App.js
+
 _Assuming that App.js is where you have your root element_
+
 ```javascript
 import React, {Component} from 'react';
 import {View,Text} from 'react-native';
