@@ -3,13 +3,14 @@ const sjcl = require("sjcl");
 
 var Datum = require("./lib/datum");
 
-if (typeof window !== "undefined"&& typeof window.Datum === "undefined")
+if (typeof window !== "undefined")
 {
-    window.Datum = Datum;
-}else{
     /**
-     * Enhance entropy in case SDK is loaded on none browser environment
+     * Increase enropy in case of browser environment
      */
     sjcl.random.startCollectors();
+
+    if(window.Datum === "undefined")
+        window.Datum = Datum;
 }
 module.exports = Datum;
