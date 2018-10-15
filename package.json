@@ -4,6 +4,7 @@
   "description": "javascript API for datum network",
   "main": "index.js",
   "scripts": {
+    "dev": "gulp dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublish": "gulp"
   },
