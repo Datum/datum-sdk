@@ -1,0 +1,7 @@
+dist/
+examples/
+
+index.js
+lib/
+test/
+gulpfile.js
