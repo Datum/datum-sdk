@@ -1,7 +1,7 @@
 jest.setTimeout(30000);
 
-const setupDatum = require('../utils/setupDatum');
 const Datum = require('../../index');
+const { setupDatum } = require('../utils');
 
 let datum;
 
@@ -13,7 +13,7 @@ beforeAll(async (done) => {
 describe('set data with replicationMode', () => {
   const DATA = 'data';
 
-  it('sets data with a number as replicationMode', async () => {
+  it.skip('sets data with a number as replicationMode', async () => {
     const REPLICATION_MODE = 2;
     const hash = await datum.set(DATA, undefined, undefined, REPLICATION_MODE);
     const item = await Datum.getItem(hash);

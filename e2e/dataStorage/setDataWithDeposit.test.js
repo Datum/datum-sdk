@@ -1,8 +1,8 @@
 jest.setTimeout(30000);
 
 const BigNumber = require('bignumber.js');
-const setupDatum = require('../utils/setupDatum');
 const Datum = require('../../index');
+const { setupDatum } = require('../utils');
 
 let datum;
 

@@ -1,7 +1,7 @@
 jest.setTimeout(30000);
 
-const setupDatum = require('../utils/setupDatum');
 const Datum = require('../../index');
+const { setupDatum } = require('../utils');
 
 let datum;
 

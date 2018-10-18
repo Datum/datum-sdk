@@ -1,6 +1,6 @@
 jest.setTimeout(30000);
 
-const setupDatum = require('../utils/setupDatum');
+const { setupDatum } = require('../utils');
 
 let datum;
 
