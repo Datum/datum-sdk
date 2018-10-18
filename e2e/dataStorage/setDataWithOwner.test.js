@@ -27,7 +27,7 @@ describe('set data with owner', () => {
       OWNER,
     );
     const item = await Datum.getItem(hash);
-    expect(item.owner).toBe(OWNER);
+    expect(item.owner.toUpperCase()).toBe(OWNER.toUpperCase());
   });
 
   it('throws an error if owner is not a valid address', async () => {
