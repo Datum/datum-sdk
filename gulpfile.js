@@ -50,4 +50,8 @@ gulp.task('transpile',function(){
   .pipe(gulp.dest(DEST))
 });
 
+gulp.task('dev', ['bundle'], function () {
+  gulp.watch(['index.js', 'lib/**/*.js'], ['bundle']);
+});
+
 gulp.task('default',['publish']);
