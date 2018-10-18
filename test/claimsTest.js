@@ -52,7 +52,7 @@ describe('claims tests', function () {
 
         it('verifiy claim', async function () {
             //add new claim for email
-            let verified = await Datum.verifiyClaim(datum.identity.address, subject, key);
+            let verified = await Datum.verifyClaim(datum.identity.address, subject, key);
             assert.isTrue(verified, "Claim should be verified");
         });
 
