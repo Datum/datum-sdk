@@ -25,7 +25,7 @@ describe('remove claim', () => {
     await datum.removeClaim(issuerAddress, SUBJECT_ADDRESS, KEY);
 
     const claim = await Datum.getClaim(issuerAddress, SUBJECT_ADDRESS, KEY);
-    expect(claim).toBe(dataToHex('0x'));
+    expect(claim).toBe('Claim not found.');
 
     const claims = await Datum.getClaims(SUBJECT_ADDRESS);
     const relatedClaim = claims.filter(c => (

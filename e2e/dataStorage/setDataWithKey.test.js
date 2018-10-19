@@ -13,7 +13,7 @@ beforeAll(async (done) => {
 describe('set data with key', () => {
   const DATA = 'data';
 
-  it.skip('sets data with a string as key', async () => {
+  it('sets data with a string as key', async () => {
     const KEY = 'key';
     const hash = await datum.set(DATA, KEY);
     expect(await datum.get(hash)).toBe(DATA);
@@ -22,7 +22,7 @@ describe('set data with key', () => {
     expect(await Datum.getLastIdForKey(datum.identity.address, KEY)).toBe(hash);
   });
 
-  it.skip('overwrites data with the same key', async () => {
+  it('overwrites data with the same key', async () => {
     const NEW_DATA = 'new data';
     const KEY = 'key';
     const hash = await datum.set(NEW_DATA, KEY);
