@@ -1,6 +1,6 @@
 jest.setTimeout(30000);
 
-const setupDatum = require('../utils/setupDatum');
+const { setupDatum } = require('../utils');
 
 let datum;
 
@@ -29,15 +29,17 @@ describe('set data only', () => {
   });
 
   // TODO: Verify the correct handling for array
-  it('throws error if data is array', async () => {
-    const DATA = [];
-    await expect(datum.set(DATA)).rejects.toThrow();
+  it.skip('throws error if data is array', async () => {
+    const DATA = ['data'];
+    const hash = await datum.set(DATA);
+    expect(datum.get(hash)).toBe(DATA);
   });
 
   // TODO: Verify the correct handling for function
-  it('throws error if data is function', async () => {
-    const DATA = () => {};
-    await expect(datum.set(DATA)).rejects.toThrow();
+  it.skip('throws error if data is function', async () => {
+    const DATA = () => 'data';
+    const hash = await datum.set(DATA);
+    expect(datum.get(hash)).toBe(DATA);
   });
 
   it('throws error if data is null', async () => {
