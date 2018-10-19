@@ -22,7 +22,11 @@ const getFaucet = async (address) => {
     await axios.get(`https://faucet.megatron.datum.org/v1/faucet/dat/${address}`);
     await waitForBalance(address);
   } catch (err) {
-    console.error('[getFaucet]:', err);
+    if (err.response) {
+      console.error('[getFaucet]:', err.response.data);
+      return;
+    }
+    console.error('[getFaucet]:', err.message);
   }
 };
 
