@@ -9,28 +9,6 @@ beforeAll(async (done) => {
   done();
 });
 
-// TODO: Find a way to verify if category is set correctly
-describe('set data with category', () => {
-  const DATA = 'data';
-
-  it('sets data with a string as category', async () => {
-    const CATEGORY = 'category';
-    const hash = await datum.set(DATA, undefined, CATEGORY);
-    expect(await datum.get(hash)).toBe(DATA);
-  });
-});
-
-// TODO: Find a way to verify if metadata is set correctly
-describe('set data with metadata', () => {
-  const DATA = 'data';
-
-  it('sets data with a string as metadata', async () => {
-    const METADATA = 'metadata';
-    const hash = await datum.set(DATA, undefined, undefined, METADATA);
-    expect(await datum.get(hash)).toBe(DATA);
-  });
-});
-
 // TODO: Find a way to verify if privacy level is set correctly
 describe('set data with privacy level', () => {
   const DATA = 'data';

@@ -18,9 +18,9 @@ describe('verify claim', () => {
     const KEY = 'key';
     const VALUE = 'value';
 
-    expect(await Datum.verifiyClaim(issuerAddress, SUBJECT_ADDRESS, KEY)).toBeFalsy();
+    expect(await Datum.verifyClaim(issuerAddress, SUBJECT_ADDRESS, KEY)).toBeFalsy();
 
     await datum.addClaim(SUBJECT_ADDRESS, KEY, VALUE);
-    expect(await Datum.verifiyClaim(issuerAddress, SUBJECT_ADDRESS, KEY)).toBeTruthy();
+    expect(await Datum.verifyClaim(issuerAddress, SUBJECT_ADDRESS, KEY)).toBeTruthy();
   });
 });
