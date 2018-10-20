@@ -1,7 +1,8 @@
 jest.setTimeout(30000);
 
-const setupDatum = require('../utils/setupDatum');
+const BigNumber = require('bignumber.js');
 const Datum = require('../../index');
+const { setupDatum } = require('../utils');
 
 let datum;
 
@@ -15,7 +16,7 @@ describe('set data with deposit', () => {
 
   it('sets data and increases account\'s deposit balance', async () => {
     const { address } = datum.identity;
-    const originalDeposit = await Datum.getDepositBalance(address);
+    const originalDeposit = new BigNumber((await Datum.getDepositBalance(address)).toString());
 
     const DEPOSIT = 20;
     await datum.set(
@@ -29,7 +30,7 @@ describe('set data with deposit', () => {
       DEPOSIT,
     );
 
-    const newDeposit = await Datum.getDepositBalance(address);
-    expect(newDeposit - originalDeposit).toBe(DEPOSIT);
+    const newDeposit = new BigNumber((await Datum.getDepositBalance(address)).toString());
+    expect(newDeposit.minus(originalDeposit).toNumber()).toBe(DEPOSIT);
   });
 });

@@ -18,8 +18,16 @@ const waitForBalance = address => new Promise((resolve, reject) => {
 });
 
 const getFaucet = async (address) => {
-  await axios.get(`https://faucet.megatron.datum.org/v1/faucet/dat/${address}`);
-  await waitForBalance(address);
+  try {
+    await axios.get(`https://faucet.megatron.datum.org/v1/faucet/dat/${address}`);
+    await waitForBalance(address);
+  } catch (err) {
+    if (err.response) {
+      console.error('[getFaucet]:', err.response.data);
+      return;
+    }
+    console.error('[getFaucet]:', err.message);
+  }
 };
 
 const setupDatum = async () => {
