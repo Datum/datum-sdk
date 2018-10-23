@@ -8,6 +8,5 @@ gulpfile.js
 lib/contracts/
 lib/utils/
 lib/web3/settings.js
-lib/web3/storage.js
 lib/datum.js
 lib/datumIdentity.js
