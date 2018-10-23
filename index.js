@@ -3,7 +3,7 @@ const sjcl = require("sjcl");
 /**
  * Starting collectors before requiring datum in case of browser environment
  */
-if(typeof window !== "undefined"){
+if(typeof window !== "undefined"&& typeof document!=="undefined"){
     sjcl.random.startCollectors();
 }
 
