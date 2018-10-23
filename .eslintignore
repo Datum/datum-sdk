@@ -9,4 +9,3 @@ lib/contracts/
 lib/utils/
 lib/web3/settings.js
 lib/datum.js
-lib/datumIdentity.js
