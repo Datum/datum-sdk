@@ -14,7 +14,6 @@
   "author": "florian@datum.org",
   "license": "LGPL-3.0-or-later",
   "dependencies": {
-    "axios": "^0.18.0",
     "babel-polyfill": "6.26.0",
     "babel-preset-es2015": "6.24.1",
     "bignumber.js": "7.2.1",
