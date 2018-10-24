@@ -1,12 +1,11 @@
 jest.setTimeout(30000);
 
-const { setupDatum } = require('../utils');
+const { setupDatums } = require('../utils');
 
 let datum;
 
-beforeAll(async (done) => {
-  datum = await setupDatum();
-  done();
+beforeAll(() => {
+  [datum] = setupDatums();
 });
 
 // TODO: Find a way to verify if metadata is set correctly

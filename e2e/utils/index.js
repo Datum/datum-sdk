@@ -1,7 +1,7 @@
-const setupDatum = require('./setupDatum');
+const setupDatums = require('./setupDatums');
 const dataToHex = require('./dataToHex');
 
 module.exports = {
-  setupDatum,
+  setupDatums,
   dataToHex,
 };
