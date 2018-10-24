@@ -2,33 +2,36 @@ jest.setTimeout(30000);
 
 const Datum = require('../../index');
 const {
-  setupDatum,
+  setupDatums,
   dataToHex,
 } = require('../utils');
 
-const SUBJECT_ADDRESS = '0xd0164ed25f7f243a9ccab80cace48ac9a5f39cd4';
-
 let datum;
+let anotherAccount;
 
-beforeAll(async (done) => {
-  datum = await setupDatum();
-  done();
+beforeAll(() => {
+  [datum, anotherAccount] = setupDatums({
+    identityCount: 2,
+  });
 });
 
 describe('add claim', () => {
   it('adds claim with subject, key, value', async () => {
     const issuerAddress = datum.identity.address;
+    const subjectAddress = anotherAccount.identity.address;
     const KEY = 'key';
     const VALUE = 'value';
-    await datum.addClaim(SUBJECT_ADDRESS, KEY, VALUE);
 
-    const claim = await Datum.getClaim(issuerAddress, SUBJECT_ADDRESS, KEY);
+    await datum.addClaim(subjectAddress, KEY, VALUE);
+    expect(await Datum.verifyClaim(issuerAddress, subjectAddress, KEY)).toBeTruthy();
+
+    const claim = await Datum.getClaim(issuerAddress, subjectAddress, KEY);
     expect(claim).toBe(dataToHex(VALUE));
 
-    const claims = await Datum.getClaims(SUBJECT_ADDRESS);
+    const claims = await Datum.getClaims(subjectAddress);
     const relatedClaim = claims.filter(c => (
       c.issuer.toUpperCase() === issuerAddress.toUpperCase()
-        && c.subject.toUpperCase() === SUBJECT_ADDRESS.toUpperCase()
+        && c.subject.toUpperCase() === subjectAddress.toUpperCase()
         && c.key === dataToHex(KEY)
         && c.value === dataToHex(VALUE)
     ));
@@ -37,7 +40,7 @@ describe('add claim', () => {
     const cliamsByIssuer = await Datum.getClaimsByIssuer(issuerAddress);
     const relatedClaimByIssuer = cliamsByIssuer.filter(c => (
       c.issuer.toUpperCase() === issuerAddress.toUpperCase()
-        && c.subject.toUpperCase() === SUBJECT_ADDRESS.toUpperCase()
+        && c.subject.toUpperCase() === subjectAddress.toUpperCase()
         && c.key === dataToHex(KEY)
         && c.value === dataToHex(VALUE)
     ));

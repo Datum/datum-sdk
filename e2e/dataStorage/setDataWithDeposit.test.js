@@ -2,13 +2,12 @@ jest.setTimeout(30000);
 
 const BigNumber = require('bignumber.js');
 const Datum = require('../../index');
-const { setupDatum } = require('../utils');
+const { setupDatums } = require('../utils');
 
 let datum;
 
-beforeAll(async (done) => {
-  datum = await setupDatum();
-  done();
+beforeAll(() => {
+  [datum] = setupDatums();
 });
 
 describe('set data with deposit', () => {
