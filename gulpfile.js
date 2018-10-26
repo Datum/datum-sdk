@@ -18,7 +18,10 @@ var BABEL_CONFIG={
           browsers: ["last 4 versions"],
           uglify:true
         }
-      }]]};
+      }],
+      'stage-3'
+    ]
+};
 
 var SRC = 'datum.js';
 var DEST = './dist/';
