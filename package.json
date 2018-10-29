@@ -1,6 +1,6 @@
 {
   "name": "datum-sdk",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "description": "javascript API for datum network",
   "main": "index.js",
   "scripts": {
