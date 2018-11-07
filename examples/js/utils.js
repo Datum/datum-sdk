@@ -4,17 +4,17 @@ var PASSWORD ="password";
 
 createDatumObj(PASSWORD).then(obj=>{
     datum =obj;
-    fetch("https://faucet.megatron.datum.org/v1/faucet/dat/"+datum.identity.address,{
-        mode:"cors"
-    })
-        .then((res)=>{
-            console.log(res);
-            updateBalanceStatus();
-        })
-        .catch((err)=>{
-            console.error(err);
-        });
-    getElement("balanceAddress").value = datum.identity.address;
+    // fetch("https://faucet.megatron.datum.org/v1/faucet/dat/"+datum.identity.address,{
+    //     mode:"cors"
+    // })
+    //     .then((res)=>{
+    //         console.log(res);
+    //         updateBalanceStatus();
+    //     })
+    //     .catch((err)=>{
+    //         console.error(err);
+    //     });
+    // getElement("balanceAddress").value = datum.identity.address;
 });
 
 function haveBalance(){
