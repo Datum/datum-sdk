@@ -27,7 +27,7 @@ describe('remove claim', () => {
     // expect(await Datum.verifyClaim(issuerAddress, subjectAddress, KEY)).toBeFalsy();
 
     const claim = await Datum.getClaim(issuerAddress, subjectAddress, KEY);
-    expect(claim).toBe('Claim not found.');
+    expect(claim).toBe('Claim not found');
 
     const claims = await Datum.getClaims(subjectAddress);
     const relatedClaim = claims.filter(c => (
