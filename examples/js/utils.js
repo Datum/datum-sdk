@@ -74,7 +74,7 @@ function checkBalances() {
 function onDeposit() {
     updateInnerHTML("depositTransactionResult", "init deposit...");
     var amount = getElement("amountToDeposit").value;
-    datum.deposit(amount).on("transaction", function(txHash) {
+    datum.deposit(amount).then(function(txHash) {
         updateInnerHTML("depositTransactionResult",
             "hash broadcasted to network: " + txHash);
     }).then(result => {
