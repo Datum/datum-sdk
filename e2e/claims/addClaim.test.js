@@ -26,7 +26,7 @@ describe('add claim', () => {
     expect(await Datum.verifyClaim(issuerAddress, subjectAddress, KEY)).toBeTruthy();
 
     const claim = await Datum.getClaim(issuerAddress, subjectAddress, KEY);
-    expect(claim).toBe(dataToHex(VALUE));
+    expect(claim).toBe(VALUE);
 
     const claims = await Datum.getClaims(subjectAddress);
     const relatedClaim = claims.filter(c => (

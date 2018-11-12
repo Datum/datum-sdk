@@ -31,10 +31,12 @@ function updateBalanceStatus(){
     }
 }
 
-async function createDatumObj(password,accounts=0){
+async function createDatumObj(password,accounts=0,fs=false){
     let tmpDatObj = new Datum();
     let id = await Datum.createIdentity(password,accounts);
-    tmpDatObj.initialize({identity:id.keystore});
+    //Requires Fuelling server to enable fs
+    let initObject = {identity:id.keystore,useFuelingServer:fs,fuellingConfig:{URL:'http://localhost:3000/api/v1/transaction'}}
+    tmpDatObj.initialize(initObject);
     tmpDatObj.identity.storePassword(password);
     return tmpDatObj;
 }
@@ -72,7 +74,7 @@ function checkBalances() {
 function onDeposit() {
     updateInnerHTML("depositTransactionResult", "init deposit...");
     var amount = getElement("amountToDeposit").value;
-    datum.deposit(amount).on("transaction", function(txHash) {
+    datum.deposit(amount).then(function(txHash) {
         updateInnerHTML("depositTransactionResult",
             "hash broadcasted to network: " + txHash);
     }).then(result => {
