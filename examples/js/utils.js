@@ -31,9 +31,10 @@ function updateBalanceStatus(){
     }
 }
 
-async function createDatumObj(password,accounts=0,fs=true){
+async function createDatumObj(password,accounts=0,fs=false){
     let tmpDatObj = new Datum();
     let id = await Datum.createIdentity(password,accounts);
+    //Requires Fuelling server to enable fs
     let initObject = {identity:id.keystore,useFuelingServer:fs,fuellingConfig:{URL:'http://localhost:3000/api/v1/transaction'}}
     tmpDatObj.initialize(initObject);
     tmpDatObj.identity.storePassword(password);
