@@ -30,6 +30,6 @@ describe('set data with deposit', () => {
     );
 
     const newDeposit = new BigNumber((await Datum.getDepositBalance(address)).toString());
-    expect(newDeposit.minus(originalDeposit).toNumber()).toBe(DEPOSIT);
+    expect(newDeposit.minus(originalDeposit).toNumber()).toBe(20000000000000000000);
   });
 });
