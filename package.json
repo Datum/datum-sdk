@@ -1,13 +1,13 @@
 {
   "name": "datum-sdk",
-  "version": "0.1.20",
+  "version": "0.1.27",
   "description": "javascript API for datum network",
   "main": "index.js",
   "scripts": {
     "dev": "gulp dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:unit": "mocha test/",
-    "test:e2e": "jest e2e",
+    "test:e2e": "jest e2e --runInBand",
     "lint": "eslint .",
     "prepublish": "gulp"
   },
@@ -30,9 +30,9 @@
     "web3-core-promievent": "1.0.0-beta.34"
   },
   "devDependencies": {
-    "axios": "^0.18.0",
     "babel-core": "6.26.3",
     "babel-preset-env": "1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
     "browserify": "16.2.2",
     "chai": "4.1.2",
     "chai-bignumber": "2.0.2",

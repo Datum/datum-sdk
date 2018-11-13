@@ -24,6 +24,14 @@ Add this link in your page
 #### React-Native
 [Steps to setup your React-Native project to use Datum-SDK](docs/react-native.md)
 
+### Test
+
+#### E2E tests
+
+```
+npm run test:e2e
+```
+
 ### Usage
 
 Use the Datum object directly from global namespace:

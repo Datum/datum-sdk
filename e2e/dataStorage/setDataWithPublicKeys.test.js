@@ -1,14 +1,14 @@
 jest.setTimeout(60000);
 
-const { setupDatum } = require('../utils');
+const { setupDatums } = require('../utils');
 
 let datum;
 let anotherAccount;
 
-beforeAll(async (done) => {
-  datum = await setupDatum();
-  anotherAccount = await setupDatum();
-  done();
+beforeAll(() => {
+  [datum, anotherAccount] = setupDatums({
+    identityCount: 2,
+  });
 });
 
 describe('set data with public keys', () => {
