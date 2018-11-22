@@ -31,7 +31,7 @@ function updateBalanceStatus(){
     }
 }
 
-async function createDatumObj(password,accounts=0,fs=false){
+async function createDatumObj(password,fs=false,accounts=0){
     let tmpDatObj = new Datum();
     let id = await Datum.createIdentity(password,accounts);
     //Requires Fuelling server to enable fs
