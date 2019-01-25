@@ -1,14 +1,14 @@
 version: 2.1
 
 executors:
-  nodejs-executor:
+  nodejs_executor:
     docker:
       - image: node:10.15.0
     working_directory: /tmp/app
 
 jobs:
   build:
-    executor: nodejs-executor
+    executor: nodejs_executor
     steps:
       - checkout
       - run: npm ci
@@ -17,16 +17,39 @@ jobs:
           paths:
             - app
   lint:
-    executor: nodejs-executor
+    executor: nodejs_executor
     steps:
       - attach_workspace:
           at: /tmp
       - run: npm run lint
 
+  publish:
+    executor: nodejs_executor
+    steps:
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Authenticate npm registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          command: npm publish /tmp/app
+
 workflows:
-  build_test:
+  build_test_publish:
     jobs:
       - build
       - lint:
           requires:
             - build
+      - hold_publish:
+          type: approval
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - feature/DAT-695-cicd
+      - publish:
+          requires:
+            - hold_publish
