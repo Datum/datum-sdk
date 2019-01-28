@@ -42,7 +42,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Publish npm package
-          command: npm publish /tmp/app
+          command: npm publish /tmp/app --dry-run
       - add_ssh_keys
       - run:
           name: Add github.com to ssh known_hosts
