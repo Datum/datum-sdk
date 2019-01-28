@@ -32,6 +32,12 @@ jobs:
       - attach_workspace:
           at: /tmp
       - run:
+          name: Add version number to environment variable
+          command: |
+            echo "export VERSION_NUMBER=$(node -p -e "require('./package.json').version")" >> $BASH_ENV
+            echo VERSION_NUMBER=$VERSION_NUMBER
+            source $BASH_ENV
+      - run:
           name: Authenticate npm registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
@@ -44,6 +50,9 @@ jobs:
       - run:
           name: Sync to datum-sdk
           command: git push git@github.com:Datum/datum-sdk.git
+      - slack/notify:
+          message: 'datum-sdk@${VERSION_NUMBER} has been published'
+          color: '#1cbf43'
 
 publish_conditions: &publish_conditions
   requires:
