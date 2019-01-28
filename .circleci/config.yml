@@ -49,7 +49,7 @@ jobs:
           command: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
       - run:
           name: Sync to datum-sdk
-          command: git push git@github.com:Datum/datum-sdk.git
+          command: git push git@github.com:Datum/datum-sdk.git $CIRCLE_BRANCH:test
       - slack/notify:
           message: 'datum-sdk@${VERSION_NUMBER} has been published'
           color: '#1cbf43'
