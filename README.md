@@ -50,6 +50,11 @@ Datum.createIdentity(
   console.error(e)
 });
 ```
+
+### Publish package
+
+Publishing package is automated by [CircleCI](https://circleci.com/gh/Datum/datum-sdk-internal) every time `master` branch has been updated. However, you still need to manually update the version number as determining semantic version cannot be automated. To update the version, run [`npm version` command](https://docs.npmjs.com/cli/version.html), push it to upstream and merge it to `master` branch.
+
 ## Examples
 
 [For more code snippets checkout our getting started documentations](https://gettingstarted.datum.org/)
