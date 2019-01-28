@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@1.0.3
+
 executors:
   nodejs_executor:
     docker:
@@ -42,6 +45,15 @@ jobs:
           name: Sync to datum-sdk
           command: git push git@github.com:Datum/datum-sdk.git
 
+publish_conditions: &publish_conditions
+  requires:
+    - build
+  filters:
+    branches:
+      only:
+        - master
+        - feature/DAT-695-cicd
+
 workflows:
   build_test_publish:
     jobs:
@@ -49,15 +61,12 @@ workflows:
       - lint:
           requires:
             - build
-      - hold_publish:
+      - slack/approval-notification:
+          message: Step 'publish' in datum-sdk-internal is awaiting your approval.
+          <<: *publish_conditions
+      - approve_publish:
           type: approval
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - master
-                - feature/DAT-695-cicd
+          <<: *publish_conditions
       - publish:
           requires:
-            - hold_publish
+            - approve_publish
