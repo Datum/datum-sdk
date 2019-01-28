@@ -32,7 +32,15 @@ jobs:
           name: Authenticate npm registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
+          name: Publish npm package
           command: npm publish /tmp/app
+      - add_ssh_keys
+      - run:
+          name: Add github.com to ssh known_hosts
+          command: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      - run:
+          name: Sync to datum-sdk
+          command: git push git@github.com:Datum/datum-sdk.git
 
 workflows:
   build_test_publish:
